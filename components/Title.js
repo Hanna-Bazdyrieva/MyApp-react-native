@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
 		marginLeft: "auto",
 		marginBottom: 32,
 		fontSize: 30,
-		fontWeight: 500,
+		fontFamily: "Roboto-Medium",
 		color: colors.black,
 	},
 });

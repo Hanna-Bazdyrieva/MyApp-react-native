@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
 		borderRadius: 100,
 	},
 	btnText: {
+		fontFamily: "Roboto-Regular",
 		fontSize: 16,
 		color: colors.white,
 	},

@@ -4,6 +4,8 @@ import Button from "react-native-button";
 import padding from "../utils/paddingsStyling";
 import colors from "../config/colors";
 import ButtonEl from "./ButtonEl";
+import Title from "./Title";
+import LinkText from "./LinkText";
 
 export default function LoginScreen() {
 	const {
@@ -65,9 +67,7 @@ export default function LoginScreen() {
 
 			<ButtonEl text="Увійти" handleClick={handleSubmit} />
 
-			<Text style={styles.textLink}>
-				Немає акаунту? <Text>Зареєструватися</Text>
-			</Text>
+			<LinkText navigateTo={"register"} />
 		</View>
 	);
 }
@@ -95,6 +95,8 @@ const styles = StyleSheet.create({
 		width: "100%",
 		height: 50,
 		fontSize: 16,
+		fontFamily: "Roboto-Regular",
+
 		color: "#212121",
 
 		backgroundColor: "#F6F6F6",
@@ -109,10 +111,7 @@ const styles = StyleSheet.create({
 		right: 16,
 		fontSize: 16,
 		color: "#1B4371",
-	},
-	textLink: {
-		fontSize: 16,
-		color: "#1B4371",
+		fontFamily: "Roboto-Regular",
 	},
 	error: {
 		position: "absolute",

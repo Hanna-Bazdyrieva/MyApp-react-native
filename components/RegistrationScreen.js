@@ -6,6 +6,7 @@ import padding from "../utils/paddingsStyling";
 import ButtonEl from "./ButtonEl";
 import colors from "../config/colors";
 import Title from "./Title";
+import LinkText from "./LinkText";
 
 export default function RegistrationScreen() {
 	const {
@@ -89,9 +90,7 @@ export default function RegistrationScreen() {
 
 			<ButtonEl text="Зареєструватися" handleClick={handleSubmit} />
 
-			<Text style={styles.textLink}>
-				Немає акаунту? <Text>Зареєструватися</Text>
-			</Text>
+			<LinkText navigateTo={"login"} />
 		</View>
 	);
 }
@@ -126,10 +125,6 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		top: 16,
 		right: 16,
-		fontSize: 16,
-		color: colors.textAccent,
-	},
-	textLink: {
 		fontSize: 16,
 		color: colors.textAccent,
 	},

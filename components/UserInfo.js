@@ -33,12 +33,13 @@ const styles = StyleSheet.create({
 	},
 	login: {
 		fontSize: 13,
-		fontWeight: 700,
+		fontFamily: "Roboto-Bold",
+		// fontWeight: 700,
 		color: colors.black,
 	},
 	email: {
 		fontSize: 11,
-		fontWeight: 400,
+		fontFamily: "Roboto-Regular",
 		color: colors.black,
 	},
 	avatar: {

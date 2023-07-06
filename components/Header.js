@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
 		marginBottom: 12,
 
 		fontSize: 24,
-		fontWeight: 500,
+		fontFamily: "Roboto-Medium",
 		color: colors.black,
 	},
 	icon: {

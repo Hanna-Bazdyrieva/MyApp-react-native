@@ -9,8 +9,8 @@ export default function WelcomeScreen({ onClick }) {
 		<>
 			<ScreenImage />
 			{/* <WelcomeWrap /> */}
-			{/* <LoginScreen /> */}
-			<RegistrationScreen />
+			<LoginScreen />
+			{/* <RegistrationScreen /> */}
 		</>
 	);
 }

@@ -21,17 +21,4 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		backgroundColor: "rgba(255, 255, 255, 0.5)",
 	},
-	btn: {
-		marginTop: 28,
-		marginBottom: 16,
-		...padding(16),
-		width: "100%",
-		backgroundColor: "#FF6C00",
-		borderRadius: 100,
-		opacity: 1,
-	},
-	btnText: {
-		fontSize: 20,
-		color: "#FFFFFF",
-	},
 });
