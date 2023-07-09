@@ -1,5 +1,6 @@
 export default {
 	accent: "#FF6C00",
+	accentDark: "#db5b00",
 	white: "#FFFFFF",
 	black: "#212121",
 	textAccent: "#1B4371",

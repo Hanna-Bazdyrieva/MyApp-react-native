@@ -1,10 +1,13 @@
 import { StyleSheet, Text } from "react-native";
 
 function LinkText({ navigateTo }) {
+	const handleRegisterPress = () => console.log("Зареєструватися link pressed");
+	const handleLoginPress = () => console.log("Увійти link pressed");
+
 	if (navigateTo === "login") {
 		return (
 			<Text style={styles.textLink}>
-				Вже є акаунт? <Text>Увійти</Text>
+				Вже є акаунт? <Text onPress={handleLoginPress}>Увійти</Text>
 			</Text>
 		);
 	}
@@ -12,7 +15,8 @@ function LinkText({ navigateTo }) {
 	if (navigateTo === "register") {
 		return (
 			<Text style={styles.textLink}>
-				Немає акаунту? <Text>Зареєструватися</Text>
+				Немає акаунту?{" "}
+				<Text onPress={handleRegisterPress}>Зареєструватися</Text>
 			</Text>
 		);
 	}

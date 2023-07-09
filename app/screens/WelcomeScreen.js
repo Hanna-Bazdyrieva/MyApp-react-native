@@ -1,3 +1,4 @@
+import { KeyboardAvoidingView, Platform } from "react-native";
 import LoginScreen from "../components/LoginScreen";
 import RegistrationScreen from "../components/RegistrationScreen";
 import ScreenImage from "../components/ScreenImage";
@@ -9,8 +10,12 @@ export default function WelcomeScreen({ onClick }) {
 		<>
 			<ScreenImage />
 			{/* <WelcomeWrap /> */}
-			<LoginScreen />
-			{/* <RegistrationScreen /> */}
+			<KeyboardAvoidingView
+				behavior={Platform.OS == "ios" ? "padding" : "height"}
+			>
+				{/* <LoginScreen /> */}
+				<RegistrationScreen />
+			</KeyboardAvoidingView>
 		</>
 	);
 }

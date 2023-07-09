@@ -1,13 +1,18 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { ImageBackground, StyleSheet, Text, View } from "react-native";
+import {
+	ImageBackground,
+	Platform,
+	StatusBar,
+	StyleSheet,
+	Text,
+	View,
+} from "react-native";
 import LogOut from "../assets/log-out.png";
 import colors from "../config/colors";
 
 export default function Header({ title }) {
 	return (
 		<>
-			{/* <StatusBar style="auto" /> */}
 			<View style={styles.header}>
 				<Text style={styles.title}>{title}</Text>
 				<ImageBackground style={styles.icon} source={LogOut} />
@@ -22,8 +27,8 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "flex-end",
 		position: "relative",
-
-		height: 88,
+		marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+		height: 44,
 		width: "100%",
 
 		borderBottomWidth: 1,
@@ -34,7 +39,7 @@ const styles = StyleSheet.create({
 		marginRight: "auto",
 		marginBottom: 12,
 
-		fontSize: 24,
+		fontSize: 18,
 		fontFamily: "Roboto-Medium",
 		color: colors.black,
 	},
