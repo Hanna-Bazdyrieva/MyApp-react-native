@@ -17,6 +17,7 @@ import Title from "./Title";
 import LinkText from "./LinkText";
 import { emailRules, passwordRules } from "../utils/validateInputs";
 import { useState } from "react";
+import ScreenImage from "./ScreenImage";
 
 // const emailRegexp =
 // 	/^[A-Za-z0-9](?:[A-Za-z0-9.-]*[A-Za-z0-9])?@[A-Za-z0-9.-]+(?:\.[A-Za-z0-9.-_]+)[^-]$/u;
@@ -57,7 +58,10 @@ export default function LoginScreen() {
 	return (
 		<KeyboardAvoidingView
 			behavior={Platform.OS == "ios" ? "padding" : "height"}
+			keyboardVerticalOffset={-220}
+			style={styles.container}
 		>
+			<ScreenImage />
 			<View style={styles.formContainer}>
 				<Title>Увійти</Title>
 
@@ -122,18 +126,18 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		justifyContent: "flex-end",
+	},
 	formContainer: {
-		position: "absolute",
-		bottom: 0,
-		...padding(32, 16, 0),
+		...padding(32, 16, 110),
 		width: "100%",
-		height: 490,
 
-		// height: "63%",
 		alignItems: "center",
 		backgroundColor: "#fff",
-		borderColor: "#E8E8E8",
-		borderWidth: 1,
+		borderTopLeftRadius: 25,
+		borderTopRightRadius: 25,
 	},
 	inputWrap: {
 		position: "relative",

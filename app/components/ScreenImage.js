@@ -6,5 +6,9 @@ export default function ScreenImage() {
 }
 
 const styles = StyleSheet.create({
-	flex: 1,
+	// flex: 1,
+	// zIndex: -1,
+	position: "absolute",
+	width: "100%",
+	height: "100%",
 });

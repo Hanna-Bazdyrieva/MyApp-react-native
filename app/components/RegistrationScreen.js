@@ -6,23 +6,33 @@ import {
 	StyleSheet,
 	KeyboardAvoidingView,
 	Pressable,
+	ImageBackgroundBase,
+	ImageBackground,
 } from "react-native";
+import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import { emailRules, loginRules, passwordRules } from "../utils/validateInputs";
 import padding from "../utils/paddingsStyling";
 
-import AvatarInput from "./AvatarInput";
+import AvatarInput from "./AvatarAdd";
 import ButtonEl from "./AppButton";
 import Title from "./Title";
 import LinkText from "./LinkText";
 
 import colors from "../config/colors";
-import { useState } from "react";
+import background from "../assets/background.png";
+import AvatarAdd from "./AvatarAdd";
+import ScreenImage from "./ScreenImage";
 
 export default function RegistrationScreen() {
 	const [isSecure, setIsSecure] = useState(true);
+
+	const handleAvatarAdd = () => {
+		console.log("AddAvatar pressed");
+	};
+
 	const toggleSecure = () => {
 		isSecure === true ? setIsSecure(false) : setIsSecure(true);
 	};
@@ -42,17 +52,16 @@ export default function RegistrationScreen() {
 	return (
 		<KeyboardAvoidingView
 			behavior={Platform.OS == "ios" ? "padding" : "height"}
+			keyboardVerticalOffset={-190}
+			style={styles.container}
 		>
+			<ScreenImage />
+
 			<View style={styles.formContainer}>
-				<AvatarInput />
+				<AvatarAdd onPress={handleAvatarAdd} />
 				<Title>Реєстрація</Title>
 
 				<View style={styles.inputWrap}>
-					{/* <MaterialCommunityIcons
-						name="email"
-						size={24}
-						color={colors.accentDark}
-					/> */}
 					<Controller
 						control={control}
 						rules={loginRules}
@@ -135,19 +144,27 @@ export default function RegistrationScreen() {
 }
 
 const styles = StyleSheet.create({
-	formContainer: {
-		position: "absolute",
-		bottom: 0,
-		...padding(92, 16, 0),
-		width: "100%",
-		height: 550,
+	container: {
+		flex: 1,
 
+		// position: "absolute",
+		justifyContent: "flex-end",
+	},
+	formContainer: {
+		// flex: 1,
+		// flexDirection: "column",
+		// justifyContent: "space-around",
+		...padding(92, 16, 78),
+		width: "100%",
+		// height: 550,
 		// height: "70%",
 		alignItems: "center",
 		backgroundColor: colors.white,
+		borderTopLeftRadius: 25,
+		borderTopRightRadius: 25,
 	},
 	inputWrap: {
-		position: "relative",
+		// position: "relative",
 		width: "100%",
 	},
 	input: {

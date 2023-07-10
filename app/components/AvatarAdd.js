@@ -1,15 +1,22 @@
-import { ImageBackground, StyleSheet, View } from "react-native";
+import {
+	ImageBackground,
+	StyleSheet,
+	TouchableOpacity,
+	View,
+} from "react-native";
 import Add from "../assets/add.png";
 
-export default function AvatarInput() {
+export default function AvatarAdd({ onPress }) {
 	return (
 		<View style={styles.wrap}>
 			<View style={styles.avatar}></View>
-			<ImageBackground
-				source={Add}
-				style={styles.imgWrap}
-				imageStyle={styles.addImg}
-			/>
+			<TouchableOpacity onPress={onPress}>
+				<ImageBackground
+					source={Add}
+					style={styles.imgWrap}
+					imageStyle={styles.addImg}
+				/>
+			</TouchableOpacity>
 		</View>
 	);
 }
