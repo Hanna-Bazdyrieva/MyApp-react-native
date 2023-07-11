@@ -6,17 +6,22 @@ function LinkText({ navigateTo }) {
 
 	if (navigateTo === "login") {
 		return (
-			<Text style={styles.textLink}>
-				Вже є акаунт? <Text onPress={handleLoginPress}>Увійти</Text>
+			<Text style={styles.text}>
+				Вже є акаунт?{" "}
+				<Text style={styles.textLink} onPress={handleLoginPress}>
+					Увійти
+				</Text>
 			</Text>
 		);
 	}
 
 	if (navigateTo === "register") {
 		return (
-			<Text style={styles.textLink}>
+			<Text style={styles.text}>
 				Немає акаунту?{" "}
-				<Text onPress={handleRegisterPress}>Зареєструватися</Text>
+				<Text style={styles.textLink} onPress={handleRegisterPress}>
+					Зареєструватися
+				</Text>
 			</Text>
 		);
 	}
@@ -25,9 +30,12 @@ function LinkText({ navigateTo }) {
 export default LinkText;
 
 const styles = StyleSheet.create({
-	textLink: {
+	text: {
 		fontFamily: "Roboto-Regular",
 		fontSize: 16,
 		color: "#1B4371",
+	},
+	textLink: {
+		textDecorationLine: "underline",
 	},
 });

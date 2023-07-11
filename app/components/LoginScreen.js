@@ -39,21 +39,37 @@ import ScreenImage from "./ScreenImage";
 
 export default function LoginScreen() {
 	const [isSecure, setIsSecure] = useState(true);
-	const toggleSecure = () => {
-		isSecure === true ? setIsSecure(false) : setIsSecure(true);
+	const [isFocused, setIsFocused] = useState(null);
+
+	const defaultValues = {
+		email: "",
+		password: "",
 	};
+
 	const {
 		control,
 		handleSubmit,
+		reset,
 		formState: { errors },
-	} = useForm({
-		defaultValues: {
-			email: "",
-			password: "",
-		},
-	});
+	} = useForm(defaultValues);
 
-	const onSubmit = (data) => console.log("Login data ", data);
+	const toggleSecure = () => {
+		isSecure === true ? setIsSecure(false) : setIsSecure(true);
+	};
+
+	const onFocus = (inputName) => {
+		setIsFocused(inputName);
+	};
+
+	const onBlur = (inputName) => {
+		setIsFocused(null);
+	};
+
+	const onSubmit = (data) => {
+		console.log("Registration data", data);
+		reset(defaultValues);
+		setIsFocused(null);
+	};
 
 	return (
 		<KeyboardAvoidingView
@@ -69,10 +85,11 @@ export default function LoginScreen() {
 					<Controller
 						control={control}
 						rules={emailRules}
-						render={({ field: { onChange, onBlur, value } }) => (
+						render={({ field: { onChange, value } }) => (
 							<TextInput
-								style={styles.input}
+								style={[styles.input, isFocused === "email" && styles.focused]}
 								placeholder="Адреса електронної пошти"
+								onFocus={() => onFocus("email")}
 								onBlur={onBlur}
 								onChangeText={onChange}
 								value={value}
@@ -91,11 +108,15 @@ export default function LoginScreen() {
 					<Controller
 						control={control}
 						rules={passwordRules}
-						render={({ field: { onChange, onBlur, value } }) => (
+						render={({ field: { onChange, value } }) => (
 							<TextInput
-								style={styles.input}
+								style={[
+									styles.input,
+									isFocused === "password" && styles.focused,
+								]}
 								placeholder="••••••••••••"
 								secureTextEntry={isSecure}
+								onFocus={() => onFocus("password")}
 								onBlur={onBlur}
 								onChangeText={onChange}
 								value={value}
@@ -159,6 +180,10 @@ const styles = StyleSheet.create({
 
 		borderColor: "#E8E8E8",
 		borderRadius: 8,
+	},
+	focused: {
+		borderColor: colors.accent,
+		borderWidth: 1,
 	},
 	showContainer: {
 		position: "absolute",

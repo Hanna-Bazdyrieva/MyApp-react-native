@@ -28,6 +28,20 @@ import ScreenImage from "./ScreenImage";
 
 export default function RegistrationScreen() {
 	const [isSecure, setIsSecure] = useState(true);
+	const [isFocused, setIsFocused] = useState(null);
+
+	const defaultValues = {
+		login: "",
+		email: "",
+		password: "",
+	};
+
+	const {
+		control,
+		handleSubmit,
+		reset,
+		formState: { errors },
+	} = useForm(defaultValues);
 
 	const handleAvatarAdd = () => {
 		console.log("AddAvatar pressed");
@@ -36,18 +50,20 @@ export default function RegistrationScreen() {
 	const toggleSecure = () => {
 		isSecure === true ? setIsSecure(false) : setIsSecure(true);
 	};
-	const {
-		control,
-		handleSubmit,
-		formState: { errors },
-	} = useForm({
-		defaultValues: {
-			name: "",
-			email: "",
-			password: "",
-		},
-	});
-	const onSubmit = (data) => console.log("Registration data", data);
+
+	const onFocus = (inputName) => {
+		setIsFocused(inputName);
+	};
+
+	const onBlur = (inputName) => {
+		setIsFocused(null);
+	};
+
+	const onSubmit = (data) => {
+		console.log("Registration data", data);
+		reset(defaultValues);
+		setIsFocused(null);
+	};
 
 	return (
 		<KeyboardAvoidingView
@@ -65,12 +81,13 @@ export default function RegistrationScreen() {
 					<Controller
 						control={control}
 						rules={loginRules}
-						render={({ field: { onChange, onBlur, value } }) => (
+						render={({ field: { onChange, value } }) => (
 							<TextInput
-								style={styles.input}
+								style={[styles.input, isFocused === "login" && styles.focused]}
 								placeholder="Логін"
 								onBlur={onBlur}
 								onChangeText={onChange}
+								onFocus={() => onFocus("login")}
 								value={value}
 							></TextInput>
 						)}
@@ -87,10 +104,11 @@ export default function RegistrationScreen() {
 					<Controller
 						control={control}
 						rules={emailRules}
-						render={({ field: { onChange, onBlur, value } }) => (
+						render={({ field: { onChange, value } }) => (
 							<TextInput
-								style={styles.input}
+								style={[styles.input, isFocused === "email" && styles.focused]}
 								placeholder="Адреса електронної пошти"
+								onFocus={() => onFocus("email")}
 								onBlur={onBlur}
 								onChangeText={onChange}
 								value={value}
@@ -109,11 +127,15 @@ export default function RegistrationScreen() {
 					<Controller
 						control={control}
 						rules={passwordRules}
-						render={({ field: { onChange, onBlur, value } }) => (
+						render={({ field: { onChange, value } }) => (
 							<TextInput
-								style={styles.input}
+								style={[
+									styles.input,
+									isFocused === "password" && styles.focused,
+								]}
 								placeholder="••••••••••••"
 								secureTextEntry={isSecure}
+								onFocus={() => onFocus("password")}
 								onBlur={onBlur}
 								onChangeText={onChange}
 								value={value}
@@ -146,25 +168,18 @@ export default function RegistrationScreen() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-
-		// position: "absolute",
 		justifyContent: "flex-end",
 	},
 	formContainer: {
-		// flex: 1,
-		// flexDirection: "column",
-		// justifyContent: "space-around",
 		...padding(92, 16, 78),
 		width: "100%",
-		// height: 550,
-		// height: "70%",
 		alignItems: "center",
+
 		backgroundColor: colors.white,
 		borderTopLeftRadius: 25,
 		borderTopRightRadius: 25,
 	},
 	inputWrap: {
-		// position: "relative",
 		width: "100%",
 	},
 	input: {
@@ -178,6 +193,10 @@ const styles = StyleSheet.create({
 		borderColor: colors.borderInput,
 		borderWidth: 1,
 		borderRadius: 8,
+	},
+	focused: {
+		borderColor: colors.accent,
+		borderWidth: 1,
 	},
 	showContainer: {
 		position: "absolute",
