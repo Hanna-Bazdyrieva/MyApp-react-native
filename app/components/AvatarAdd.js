@@ -5,6 +5,7 @@ import {
 	View,
 } from "react-native";
 import Add from "../assets/add.png";
+import colors from "../config/colors";
 
 export default function AvatarAdd({ onPress }) {
 	return (
@@ -25,14 +26,14 @@ const styles = StyleSheet.create({
 	wrap: {
 		position: "absolute",
 		top: -60,
-		backgroundColor: "transparent",
+		backgroundColor: colors.transparent,
 		width: 132,
 		height: 120,
 	},
 	avatar: {
 		width: 120,
 		height: 120,
-		backgroundColor: "#F6F6F6",
+		backgroundColor: colors.bgInput,
 		borderRadius: 16,
 	},
 	imgWrap: {
@@ -41,7 +42,7 @@ const styles = StyleSheet.create({
 		bottom: 14,
 		width: 25,
 		height: 25,
-		backgroundColor: "#FFFFFF",
+		backgroundColor: colors.white,
 		borderRadius: 100,
 	},
 });

@@ -1,5 +1,4 @@
 import { StyleSheet, View } from "react-native";
-import Button from "react-native-button";
 import padding from "../utils/paddingsStyling";
 import ButtonEl from "./AppButton";
 

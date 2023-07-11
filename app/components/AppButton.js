@@ -1,4 +1,3 @@
-import Button from "react-native-button";
 import { Pressable, StyleSheet, TouchableOpacity, Text } from "react-native";
 
 import padding from "../utils/paddingsStyling";
@@ -7,10 +6,6 @@ import colors from "../config/colors";
 
 export default function AppButton({ text, onPress, propStyle }) {
 	return (
-		// <TouchableOpacity onPress={onPress} style={styles.btn}>
-		// 	<Text style={[styles.btnText, propStyle]}>{text}</Text>
-		// </TouchableOpacity>
-
 		<Pressable
 			onPress={onPress}
 			style={({ pressed }) => [
@@ -37,7 +32,6 @@ const styles = StyleSheet.create({
 		...padding(16),
 		width: "100%",
 		alignItems: "center",
-		// backgroundColor: colors.accent,
 		borderRadius: 100,
 	},
 	btnText: {

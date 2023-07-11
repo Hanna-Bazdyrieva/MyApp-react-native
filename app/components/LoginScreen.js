@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
 	Text,
 	View,
@@ -8,38 +9,22 @@ import {
 	Platform,
 	Pressable,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { useForm, Controller } from "react-hook-form";
-// import Button from "react-native-button";
+
+import { emailRules, passwordRules } from "../utils/validateInputs";
 import padding from "../utils/paddingsStyling";
 import colors from "../config/colors";
+
 import ButtonEl from "./AppButton";
 import Title from "./Title";
 import LinkText from "./LinkText";
-import { emailRules, passwordRules } from "../utils/validateInputs";
-import { useState } from "react";
 import ScreenImage from "./ScreenImage";
-
-// const emailRegexp =
-// 	/^[A-Za-z0-9](?:[A-Za-z0-9.-]*[A-Za-z0-9])?@[A-Za-z0-9.-]+(?:\.[A-Za-z0-9.-_]+)[^-]$/u;
-// const passwordRegexp = /^(?=.*[0-9])(?=.*[!@#$%^&])[a-zA-Z0-9!@#$%^&*]+$/;
-
-// const emailRules = {
-// 	required: true,
-// 	maxLength: 63,
-// 	minLength: 6,
-// 	pattern: emailRegexp,
-// };
-
-// const passwordRules = {
-// 	required: true,
-// 	maxLength: 16,
-// 	minLength: 6,
-// 	pattern: passwordRegexp,
-// };
 
 export default function LoginScreen() {
 	const [isSecure, setIsSecure] = useState(true);
 	const [isFocused, setIsFocused] = useState(null);
+	const navigation = useNavigation();
 
 	const defaultValues = {
 		email: "",
@@ -69,12 +54,13 @@ export default function LoginScreen() {
 		console.log("Registration data", data);
 		reset(defaultValues);
 		setIsFocused(null);
+		navigation.navigate("Home", { email: data.email });
 	};
 
 	return (
 		<KeyboardAvoidingView
 			behavior={Platform.OS == "ios" ? "padding" : "height"}
-			keyboardVerticalOffset={-220}
+			keyboardVerticalOffset={-110}
 			style={styles.container}
 		>
 			<ScreenImage />
@@ -140,7 +126,7 @@ export default function LoginScreen() {
 
 				<ButtonEl text="Увійти" onPress={handleSubmit(onSubmit)} />
 
-				<LinkText navigateTo={"register"} />
+				<LinkText navigateTo={"register"} navigation={navigation} />
 			</View>
 		</KeyboardAvoidingView>
 	);
@@ -152,11 +138,11 @@ const styles = StyleSheet.create({
 		justifyContent: "flex-end",
 	},
 	formContainer: {
-		...padding(32, 16, 110),
+		...padding(32, 16, 78),
 		width: "100%",
 
 		alignItems: "center",
-		backgroundColor: "#fff",
+		backgroundColor: colors.white,
 		borderTopLeftRadius: 25,
 		borderTopRightRadius: 25,
 	},
@@ -173,15 +159,16 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		fontFamily: "Roboto-Regular",
 
-		color: "#212121",
+		color: colors.black,
 
-		backgroundColor: "#F6F6F6",
+		backgroundColor: colors.bgInput,
 		borderWidth: 1,
 
-		borderColor: "#E8E8E8",
+		borderColor: colors.borderInput,
 		borderRadius: 8,
 	},
 	focused: {
+		backgroundColor: colors.white,
 		borderColor: colors.accent,
 		borderWidth: 1,
 	},
@@ -192,7 +179,7 @@ const styles = StyleSheet.create({
 	},
 	show: {
 		fontSize: 16,
-		color: "#1B4371",
+		color: colors.textAccent,
 		fontFamily: "Roboto-Regular",
 	},
 	error: {
@@ -200,6 +187,6 @@ const styles = StyleSheet.create({
 		bottom: 0,
 		left: 16,
 		fontSize: 12,
-		color: "red",
+		color: colors.error,
 	},
 });

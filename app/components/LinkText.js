@@ -1,8 +1,15 @@
 import { StyleSheet, Text } from "react-native";
+import colors from "../config/colors";
 
-function LinkText({ navigateTo }) {
-	const handleRegisterPress = () => console.log("Зареєструватися link pressed");
-	const handleLoginPress = () => console.log("Увійти link pressed");
+function LinkText({ navigateTo, navigation }) {
+	const handleRegisterPress = () => {
+		// console.log("Зареєструватися link pressed");
+		navigation.navigate("Register");
+	};
+	const handleLoginPress = () => {
+		// console.log("Увійти link pressed");
+		navigation.navigate("Login");
+	};
 
 	if (navigateTo === "login") {
 		return (
@@ -33,7 +40,7 @@ const styles = StyleSheet.create({
 	text: {
 		fontFamily: "Roboto-Regular",
 		fontSize: 16,
-		color: "#1B4371",
+		color: colors.textAccent,
 	},
 	textLink: {
 		textDecorationLine: "underline",

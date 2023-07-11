@@ -1,5 +1,5 @@
 import LoginScreen from "../components/LoginScreen";
-import RegistrationScreen from "../components/RegistrationScreen";
+import RegisterScreen from "../components/RegisterScreen";
 import WelcomeWrap from "../components/WelcomeWrap";
 
 export default function WelcomeScreen({ onClick }) {
@@ -7,7 +7,7 @@ export default function WelcomeScreen({ onClick }) {
 		<>
 			{/* <WelcomeWrap /> */}
 			<LoginScreen />
-			{/* <RegistrationScreen /> */}
+			{/* <RegisterScreen /> */}
 		</>
 	);
 }

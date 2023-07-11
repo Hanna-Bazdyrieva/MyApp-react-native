@@ -1,34 +1,30 @@
+import { useState } from "react";
 import {
 	Text,
 	View,
 	TextInput,
-	Alert,
 	StyleSheet,
 	KeyboardAvoidingView,
 	Pressable,
-	ImageBackgroundBase,
-	ImageBackground,
 } from "react-native";
-import { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import { useForm, Controller } from "react-hook-form";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import { emailRules, loginRules, passwordRules } from "../utils/validateInputs";
 import padding from "../utils/paddingsStyling";
+import colors from "../config/colors";
 
-import AvatarInput from "./AvatarAdd";
 import ButtonEl from "./AppButton";
 import Title from "./Title";
 import LinkText from "./LinkText";
-
-import colors from "../config/colors";
-import background from "../assets/background.png";
 import AvatarAdd from "./AvatarAdd";
 import ScreenImage from "./ScreenImage";
 
-export default function RegistrationScreen() {
+export default function RegisterScreen() {
 	const [isSecure, setIsSecure] = useState(true);
 	const [isFocused, setIsFocused] = useState(null);
+	const navigation = useNavigation();
 
 	const defaultValues = {
 		login: "",
@@ -63,12 +59,13 @@ export default function RegistrationScreen() {
 		console.log("Registration data", data);
 		reset(defaultValues);
 		setIsFocused(null);
+		navigation.navigate("Home", { email: data.email, login: data.login });
 	};
 
 	return (
 		<KeyboardAvoidingView
 			behavior={Platform.OS == "ios" ? "padding" : "height"}
-			keyboardVerticalOffset={-190}
+			keyboardVerticalOffset={-110}
 			style={styles.container}
 		>
 			<ScreenImage />
@@ -159,7 +156,7 @@ export default function RegistrationScreen() {
 
 				<ButtonEl text="Зареєструватися" onPress={handleSubmit(onSubmit)} />
 
-				<LinkText navigateTo={"login"} />
+				<LinkText navigateTo={"login"} navigation={navigation} />
 			</View>
 		</KeyboardAvoidingView>
 	);
@@ -195,6 +192,7 @@ const styles = StyleSheet.create({
 		borderRadius: 8,
 	},
 	focused: {
+		backgroundColor: colors.white,
 		borderColor: colors.accent,
 		borderWidth: 1,
 	},

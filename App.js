@@ -1,4 +1,8 @@
+import "react-native-gesture-handler";
+import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import {
+	Button,
 	Keyboard,
 	SafeAreaView,
 	StyleSheet,
@@ -11,6 +15,12 @@ import { StatusBar } from "expo-status-bar";
 import WelcomeScreen from "./app/screens/WelcomeScreen";
 // import { useEffect, useState } from "react";
 import PostsScreen from "./app/screens/PostsScreen";
+import LoginScreen from "./app/components/LoginScreen";
+import RegisterScreen from "./app/components/RegisterScreen";
+import colors from "./app/config/colors";
+import LogOutBtn from "./app/components/LogOutBtn";
+
+const MainStack = createStackNavigator();
 
 export default function App() {
 	const [fontsLoaded] = useFonts({
@@ -27,9 +37,51 @@ export default function App() {
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 			<SafeAreaView style={{ flex: 1 }}>
 				<View style={styles.container}>
-					<WelcomeScreen />
-					{/* <PostsScreen /> */}
 					<StatusBar style="auto" />
+					<NavigationContainer>
+						<MainStack.Navigator initialRouteName="Login">
+							<MainStack.Screen
+								name="Login"
+								component={LoginScreen}
+								options={{ headerShown: false }}
+							/>
+							<MainStack.Screen
+								name="Register"
+								component={RegisterScreen}
+								options={{ headerShown: false }}
+							/>
+							<MainStack.Screen
+								name="Home"
+								component={PostsScreen}
+								options={{
+									title: "Публікації",
+									headerStyle: {
+										borderBottomWidth: 1,
+										borderBottomColor: colors.gray,
+									},
+									headerTintColor: colors.gray,
+									headerTitleStyle: {
+										fontWeight: "medium",
+										fontSize: 18,
+										color: colors.black,
+									},
+									headerTitleContainerStyle: {
+										marginHorizontal: 80,
+									},
+									headerRight: () => (
+										<LogOutBtn />
+										// <Button
+										// 	onPress={() => alert("This is a button!")}
+										// 	title="Press me"
+										// 	color="#fff"
+										// />
+									),
+								}}
+							/>
+						</MainStack.Navigator>
+						{/* <WelcomeScreen /> */}
+						{/* <PostsScreen /> */}
+					</NavigationContainer>
 				</View>
 			</SafeAreaView>
 		</TouchableWithoutFeedback>
