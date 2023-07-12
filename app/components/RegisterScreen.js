@@ -16,9 +16,10 @@ import colors from "../config/colors";
 import ButtonEl from "./AppButton";
 import Title from "./Title";
 import LinkText from "./LinkText";
-import AvatarAdd from "./AvatarAdd";
+import AvatarAdd from "./Avatar";
 import ScreenImage from "./ScreenImage";
 import EyeToggle from "./EyeToggle";
+import Avatar from "./Avatar";
 
 export default function RegisterScreen() {
 	const [image, setImage] = useState(null);
@@ -72,8 +73,8 @@ export default function RegisterScreen() {
 			<ScreenImage />
 
 			<View style={styles.formContainer}>
-				<AvatarAdd setImage={setImage} image={image} />
-				<Title>Реєстрація</Title>
+				<Avatar setImage={setImage} image={image} />
+				<Title style={{ marginBottom: 32 }}>Реєстрація</Title>
 
 				<View style={styles.inputWrap}>
 					<Controller

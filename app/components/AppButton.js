@@ -1,12 +1,12 @@
 import { Pressable, StyleSheet, TouchableOpacity, Text } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Feather, Entypo } from "@expo/vector-icons";
 
 import padding from "../utils/paddingsStyling";
 
 import colors from "../config/colors";
 import { View } from "react-native";
 
-export default function AppButton({ text, onPress, propStyle }) {
+export default function AppButton({ text, onPress, style, iconPost }) {
 	return (
 		<Pressable
 			onPress={onPress}
@@ -20,10 +20,15 @@ export default function AppButton({ text, onPress, propStyle }) {
 		>
 			{({ pressed }) => (
 				<View style={{ flexDirection: "row" }}>
-					<Text style={[styles.btnText, propStyle]}>
+					<Text style={[styles.btnText, style]}>
 						{pressed ? "Зроблено!" : text}
 					</Text>
-					{!pressed && <Feather name="log-in" size={20} style={styles.icon} />}
+					{!pressed && !iconPost && (
+						<Feather name="log-in" size={20} style={styles.icon} />
+					)}
+					{!pressed && iconPost && (
+						<Entypo name="publish" size={20} style={styles.icon} />
+					)}
 				</View>
 			)}
 		</Pressable>

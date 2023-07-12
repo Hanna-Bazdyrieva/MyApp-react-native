@@ -5,13 +5,13 @@ import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
 import { ImageBackground } from "react-native";
 
-export default function AvatarAdd({ setImage, image, remove }) {
-	console.log(remove);
+export default function Avatar({ setImage, image }) {
 	const deleteImage = () => {
-		console.log("Delete Avatar");
+		// console.log("Delete Avatar");
+		setImage(null);
 	};
 	const pickImage = async () => {
-		console.log("Avatar Add");
+		// console.log("Avatar Add");
 		let result = await ImagePicker.launchImageLibraryAsync({
 			mediaTypes: ImagePicker.MediaTypeOptions.All,
 			allowsEditing: true,
@@ -35,12 +35,12 @@ export default function AvatarAdd({ setImage, image, remove }) {
 			</View>
 			<TouchableOpacity
 				style={styles.iconWrap}
-				onPress={remove ? () => deleteImage() : () => pickImage()}
+				onPress={image ? () => deleteImage() : () => pickImage()}
 			>
 				<MaterialCommunityIcons
 					style={styles.icon}
-					name={remove ? "close-circle-outline" : "plus-circle-outline"}
-					color={remove ? colors.gray : colors.accent}
+					name={image ? "close-circle-outline" : "plus-circle-outline"}
+					color={image ? colors.gray : colors.accent}
 					size={25}
 				/>
 			</TouchableOpacity>

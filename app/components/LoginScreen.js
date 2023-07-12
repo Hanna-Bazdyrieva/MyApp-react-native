@@ -54,7 +54,7 @@ export default function LoginScreen() {
 		reset(defaultValues);
 		setIsFocused(null);
 		navigation.navigate("Home", {
-			screen: "Map",
+			screen: "Posts",
 
 			params: { email: data.email },
 		});
@@ -68,7 +68,7 @@ export default function LoginScreen() {
 		>
 			<ScreenImage />
 			<View style={styles.formContainer}>
-				<Title>Увійти</Title>
+				<Title style={{ marginBottom: 32 }}>Увійти</Title>
 
 				<View style={styles.inputWrap}>
 					<Controller

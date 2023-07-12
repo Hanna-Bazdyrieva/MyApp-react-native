@@ -4,7 +4,7 @@ import { useRoute } from "@react-navigation/native";
 import ImageCard from "../components/ImageCard";
 import colors from "../config/colors";
 
-export default function MapScreen() {
+export default function PostsScreen() {
 	const {
 		params: {
 			email = "hanna@mail.ua",

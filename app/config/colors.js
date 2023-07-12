@@ -2,7 +2,7 @@ export default {
 	accent: "#FF6C00",
 	accentDark: "#DB5B00",
 	white: "#FFFFFF",
-	offWhite: "#E5E5E5",
+	offWhite: "rgba(255,255,255,0.4)",
 	black: "#212121",
 	black08: "rgba(33,33,33,0.8)",
 	textAccent: "#1B4371",

@@ -1,31 +1,23 @@
-import React from "react";
-import { Pressable, StyleSheet, View } from "react-native";
-import { StatusBar } from "expo-status-bar";
-import UserInfo from "../components/UserInfo";
-
-import { useRoute } from "@react-navigation/native";
-import colors from "../config/colors";
 import {
 	BottomTabBar,
 	createBottomTabNavigator,
 } from "@react-navigation/bottom-tabs";
 import { AntDesign, Feather } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
+
 import ProfileScreen from "./ProfileScreen";
 import CreatePostsScreen from "./CreatePostsScreen";
 import CommentsScreen from "./CommentsScreen";
-import MapScreen from "./MapScreen";
+import PostsScreen from "./PostsScreen";
+
 import BottomTabIconsContainer from "../components/BottomTabIconsContainer";
-import { Button } from "react-native";
 import GoBackBtn from "../components/GoBackBtn";
 import LogOutBtn from "../components/LogOutBtn";
+
+import colors from "../config/colors";
 
 const Tabs = createBottomTabNavigator();
 
 <AntDesign name="delete" size={24} color="black" />;
-
-// import { Entypo } from "@expo/vector-icons";
-// <Entypo name="camera" size={24} color="black" />;
 
 // import { AntDesign } from "@expo/vector-icons";
 {
@@ -73,7 +65,7 @@ export default function Home() {
 								/>
 							</BottomTabIconsContainer>
 						);
-					} else if (route.name === "Map") {
+					} else if (route.name === "Posts") {
 						return (
 							<BottomTabIconsContainer focused={focused}>
 								<AntDesign
@@ -94,10 +86,9 @@ export default function Home() {
 			})}
 		>
 			<Tabs.Screen
-				name="Map"
-				component={MapScreen}
+				name="Posts"
+				component={PostsScreen}
 				options={{
-					// headerShown: false,
 					title: "Публікації",
 					headerStyle: {
 						borderBottomWidth: 1,
@@ -110,17 +101,9 @@ export default function Home() {
 						color: colors.black,
 					},
 					headerTitleContainerStyle: {
-						// marginHorizontal: 100,
 						marginLeft: 140,
 					},
-					headerRight: () => (
-						<LogOutBtn />
-						// <Button
-						// 	onPress={() => alert("This is a button!")}
-						// 	title="Press me"
-						// 	color="#fff"
-						// />
-					),
+					headerRight: () => <LogOutBtn style={{ top: 15 }} />,
 				}}
 			/>
 
@@ -128,8 +111,7 @@ export default function Home() {
 				name="Create"
 				component={CreatePostsScreen}
 				options={({ navigation, back }) => ({
-					// header:
-					// headerShown: false,
+					tabBarStyle: { display: "none" },
 					title: "Створити публікацію",
 
 					headerStyle: {
@@ -169,10 +151,3 @@ export default function Home() {
 		// </View>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: colors.white,
-	},
-});

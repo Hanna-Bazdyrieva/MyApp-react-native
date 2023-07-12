@@ -13,15 +13,15 @@ import { Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
 
-export default function LogOutBtn() {
+export default function LogOutBtn({ style }) {
 	const navigation = useNavigation();
 
-	const onPress = () => {
+	const onPress = ({ style }) => {
 		navigation.navigate("Login");
 	};
 
 	return (
-		<Pressable onPress={onPress} style={styles.btn}>
+		<Pressable onPress={onPress} style={[styles.btn, style]}>
 			{({ pressed }) => (
 				<Feather
 					name="log-out"
@@ -41,8 +41,11 @@ export default function LogOutBtn() {
 
 const styles = StyleSheet.create({
 	btn: {
-		alignSelf: "flex-end",
-		paddingHorizontal: 16,
+		position: "absolute",
+		top: 22,
+		right: 16,
+		// alignSelf: "flex-end",
+		// paddingHorizontal: 16,
 	},
 	icon: {},
 });
