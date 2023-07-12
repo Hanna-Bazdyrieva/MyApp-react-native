@@ -1,14 +1,19 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
-import Avatar from "../assets/avatar.png";
 import colors from "../config/colors";
 
-export default function UserInfo({ login, email }) {
+export default function UserInfo({ login, email, uri }) {
 	return (
 		<>
 			<View style={styles.container}>
-				<Image style={styles.avatar} source={Avatar} />
+				<View style={styles.avatar}>
+					<ImageBackground
+						source={{ uri }}
+						resizeMode="cover"
+						style={styles.image}
+					/>
+				</View>
 				<View>
 					<Text style={styles.login}>{login}</Text>
 					<Text style={styles.email}>{email}</Text>
@@ -25,16 +30,15 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		gap: 8,
 
-		marginLeft: 16,
-		marginRight: 16,
-		marginTop: 32,
-		marginBottom: 32,
+		// marginLeft: 16,
+		// marginRight: 16,
+		// marginTop: 32,
+		// marginBottom: 32,
 		height: 60,
 	},
 	login: {
 		fontSize: 13,
 		fontFamily: "Roboto-Bold",
-		// fontWeight: 700,
 		color: colors.black,
 	},
 	email: {
@@ -46,5 +50,10 @@ const styles = StyleSheet.create({
 		height: 60,
 		width: 60,
 		borderRadius: 16,
+		overflow: "hidden",
+	},
+	image: {
+		flex: 1,
+		justifyContent: "center",
 	},
 });

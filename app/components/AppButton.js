@@ -1,8 +1,10 @@
 import { Pressable, StyleSheet, TouchableOpacity, Text } from "react-native";
+import { Feather } from "@expo/vector-icons";
 
 import padding from "../utils/paddingsStyling";
 
 import colors from "../config/colors";
+import { View } from "react-native";
 
 export default function AppButton({ text, onPress, propStyle }) {
 	return (
@@ -17,9 +19,12 @@ export default function AppButton({ text, onPress, propStyle }) {
 			]}
 		>
 			{({ pressed }) => (
-				<Text style={[styles.btnText, propStyle]}>
-					{pressed ? "Зроблено!" : text}
-				</Text>
+				<View style={{ flexDirection: "row" }}>
+					<Text style={[styles.btnText, propStyle]}>
+						{pressed ? "Зроблено!" : text}
+					</Text>
+					{!pressed && <Feather name="log-in" size={20} style={styles.icon} />}
+				</View>
 			)}
 		</Pressable>
 	);
@@ -35,8 +40,12 @@ const styles = StyleSheet.create({
 		borderRadius: 100,
 	},
 	btnText: {
+		marginRight: 12,
 		fontFamily: "Roboto-Regular",
 		fontSize: 16,
+		color: colors.white,
+	},
+	icon: {
 		color: colors.white,
 	},
 });

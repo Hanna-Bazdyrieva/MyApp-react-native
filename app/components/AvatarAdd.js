@@ -1,21 +1,47 @@
-import {
-	ImageBackground,
-	StyleSheet,
-	TouchableOpacity,
-	View,
-} from "react-native";
-import Add from "../assets/add.png";
-import colors from "../config/colors";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+import * as ImagePicker from "expo-image-picker";
+import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 
-export default function AvatarAdd({ onPress }) {
+import colors from "../config/colors";
+import { ImageBackground } from "react-native";
+
+export default function AvatarAdd({ setImage, image, remove }) {
+	console.log(remove);
+	const deleteImage = () => {
+		console.log("Delete Avatar");
+	};
+	const pickImage = async () => {
+		console.log("Avatar Add");
+		let result = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ImagePicker.MediaTypeOptions.All,
+			allowsEditing: true,
+			aspect: [1, 1],
+			quality: 1,
+		});
+
+		if (!result.canceled) {
+			setImage(result.assets[0].uri);
+		}
+	};
+
 	return (
 		<View style={styles.wrap}>
-			<View style={styles.avatar}></View>
-			<TouchableOpacity onPress={onPress}>
+			<View style={styles.avatar}>
 				<ImageBackground
-					source={Add}
-					style={styles.imgWrap}
-					imageStyle={styles.addImg}
+					source={{ uri: image }}
+					resizeMode="cover"
+					style={styles.image}
+				/>
+			</View>
+			<TouchableOpacity
+				style={styles.iconWrap}
+				onPress={remove ? () => deleteImage() : () => pickImage()}
+			>
+				<MaterialCommunityIcons
+					style={styles.icon}
+					name={remove ? "close-circle-outline" : "plus-circle-outline"}
+					color={remove ? colors.gray : colors.accent}
+					size={25}
 				/>
 			</TouchableOpacity>
 		</View>
@@ -29,20 +55,26 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.transparent,
 		width: 132,
 		height: 120,
+		alignSelf: "center",
 	},
 	avatar: {
 		width: 120,
 		height: 120,
 		backgroundColor: colors.bgInput,
 		borderRadius: 16,
+		overflow: "hidden",
 	},
-	imgWrap: {
+	iconWrap: {
 		position: "absolute",
 		right: 0,
 		bottom: 14,
-		width: 25,
-		height: 25,
+	},
+	icon: {
 		backgroundColor: colors.white,
-		borderRadius: 100,
+		borderRadius: 10,
+	},
+	image: {
+		flex: 1,
+		justifyContent: "center",
 	},
 });

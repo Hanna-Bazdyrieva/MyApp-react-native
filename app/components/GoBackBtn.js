@@ -11,20 +11,20 @@ import LogOut from "../assets/log-out.png";
 import colors from "../config/colors";
 import { Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Feather } from "@expo/vector-icons";
+import { Feather, AntDesign } from "@expo/vector-icons";
 
-export default function LogOutBtn() {
+export default function GoBackBtn() {
 	const navigation = useNavigation();
 
 	const onPress = () => {
-		navigation.navigate("Login");
+		navigation.goBack();
 	};
 
 	return (
 		<Pressable onPress={onPress} style={styles.btn}>
 			{({ pressed }) => (
-				<Feather
-					name="log-out"
+				<AntDesign
+					name="arrowleft"
 					style={[
 						styles.icon,
 						{
@@ -41,7 +41,7 @@ export default function LogOutBtn() {
 
 const styles = StyleSheet.create({
 	btn: {
-		alignSelf: "flex-end",
+		alignSelf: "flex-start",
 		paddingHorizontal: 16,
 	},
 	icon: {},

@@ -5,11 +5,9 @@ import {
 	TextInput,
 	StyleSheet,
 	KeyboardAvoidingView,
-	Pressable,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useForm, Controller } from "react-hook-form";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import { emailRules, loginRules, passwordRules } from "../utils/validateInputs";
 import padding from "../utils/paddingsStyling";
@@ -20,10 +18,13 @@ import Title from "./Title";
 import LinkText from "./LinkText";
 import AvatarAdd from "./AvatarAdd";
 import ScreenImage from "./ScreenImage";
+import EyeToggle from "./EyeToggle";
 
 export default function RegisterScreen() {
+	const [image, setImage] = useState(null);
 	const [isSecure, setIsSecure] = useState(true);
 	const [isFocused, setIsFocused] = useState(null);
+
 	const navigation = useNavigation();
 
 	const defaultValues = {
@@ -38,10 +39,6 @@ export default function RegisterScreen() {
 		reset,
 		formState: { errors },
 	} = useForm(defaultValues);
-
-	const handleAvatarAdd = () => {
-		console.log("AddAvatar pressed");
-	};
 
 	const toggleSecure = () => {
 		isSecure === true ? setIsSecure(false) : setIsSecure(true);
@@ -59,19 +56,23 @@ export default function RegisterScreen() {
 		console.log("Registration data", data);
 		reset(defaultValues);
 		setIsFocused(null);
-		navigation.navigate("Home", { email: data.email, login: data.login });
+
+		navigation.navigate("Home", {
+			screen: "Profile",
+			params: { email: data.email, login: data.login, uri: image },
+		});
 	};
 
 	return (
 		<KeyboardAvoidingView
 			behavior={Platform.OS == "ios" ? "padding" : "height"}
-			keyboardVerticalOffset={-110}
+			keyboardVerticalOffset={-180}
 			style={styles.container}
 		>
 			<ScreenImage />
 
 			<View style={styles.formContainer}>
-				<AvatarAdd onPress={handleAvatarAdd} />
+				<AvatarAdd setImage={setImage} image={image} />
 				<Title>Реєстрація</Title>
 
 				<View style={styles.inputWrap}>
@@ -140,13 +141,12 @@ export default function RegisterScreen() {
 						)}
 						name="password"
 					/>
-					<Pressable
-						style={styles.showContainer}
-						onPress={() => toggleSecure()}
-					>
-						{isSecure === true && <Text style={styles.show}>Показати</Text>}
-						{isSecure === false && <Text style={styles.show}>Сховати</Text>}
-					</Pressable>
+					<EyeToggle
+						onPress={toggleSecure}
+						isSecure={isSecure}
+						isFocused={isFocused === "password"}
+					/>
+
 					{errors.password && (
 						<Text style={styles.error}>
 							Пароль від 6 до 16 символів містить цифру та спецсимвол.
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
 		marginBottom: 16,
 		...padding(16),
 		width: "100%",
-		height: 50,
+		height: 60,
 		fontSize: 16,
 		color: colors.black,
 		backgroundColor: colors.bgInput,
@@ -195,15 +195,6 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.white,
 		borderColor: colors.accent,
 		borderWidth: 1,
-	},
-	showContainer: {
-		position: "absolute",
-		top: 16,
-		right: 16,
-	},
-	show: {
-		fontSize: 16,
-		color: colors.textAccent,
 	},
 	error: {
 		position: "absolute",

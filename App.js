@@ -14,7 +14,7 @@ import { useFonts } from "expo-font";
 import { StatusBar } from "expo-status-bar";
 import WelcomeScreen from "./app/screens/WelcomeScreen";
 // import { useEffect, useState } from "react";
-import PostsScreen from "./app/screens/PostsScreen";
+import Home from "./app/screens/Home";
 import LoginScreen from "./app/components/LoginScreen";
 import RegisterScreen from "./app/components/RegisterScreen";
 import colors from "./app/config/colors";
@@ -39,7 +39,10 @@ export default function App() {
 				<View style={styles.container}>
 					<StatusBar style="auto" />
 					<NavigationContainer>
-						<MainStack.Navigator initialRouteName="Login">
+						<MainStack.Navigator
+							initialRouteName="Login"
+							// initialRouteName="Home"
+						>
 							<MainStack.Screen
 								name="Login"
 								component={LoginScreen}
@@ -52,9 +55,10 @@ export default function App() {
 							/>
 							<MainStack.Screen
 								name="Home"
-								component={PostsScreen}
+								component={Home}
 								options={{
-									title: "Публікації",
+									headerShown: false,
+									title: "Створити публікацію",
 									headerStyle: {
 										borderBottomWidth: 1,
 										borderBottomColor: colors.gray,
