@@ -16,7 +16,6 @@ import colors from "../config/colors";
 import ButtonEl from "./AppButton";
 import Title from "./Title";
 import LinkText from "./LinkText";
-import AvatarAdd from "./Avatar";
 import ScreenImage from "./ScreenImage";
 import EyeToggle from "./EyeToggle";
 import Avatar from "./Avatar";

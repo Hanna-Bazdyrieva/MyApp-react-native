@@ -12,8 +12,8 @@ import {
 } from "react-native";
 import { useFonts } from "expo-font";
 import { StatusBar } from "expo-status-bar";
-import WelcomeScreen from "./app/screens/WelcomeScreen";
-// import { useEffect, useState } from "react";
+import { SimpleLineIcons } from "@expo/vector-icons";
+import { ToastProvider } from "react-native-toast-notifications";
 import Home from "./app/screens/Home";
 import LoginScreen from "./app/components/LoginScreen";
 import RegisterScreen from "./app/components/RegisterScreen";
@@ -34,70 +34,78 @@ export default function App() {
 	}
 
 	return (
-		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-			<SafeAreaView style={{ flex: 1 }}>
-				<View style={styles.container}>
-					<StatusBar style="auto" />
-					<NavigationContainer>
-						<MainStack.Navigator
-							initialRouteName="Login"
-							// initialRouteName="Home"
-						>
-							<MainStack.Screen
-								name="Login"
-								component={LoginScreen}
-								options={{ headerShown: false }}
-							/>
-							<MainStack.Screen
-								name="Register"
-								component={RegisterScreen}
-								options={{ headerShown: false }}
-							/>
-							<MainStack.Screen
-								name="Home"
-								component={Home}
-								options={{
-									headerShown: false,
-									title: "Створити публікацію",
-									headerStyle: {
-										borderBottomWidth: 1,
-										borderBottomColor: colors.gray,
-									},
-									headerTintColor: colors.gray,
-									headerTitleStyle: {
-										fontWeight: "medium",
-										fontSize: 18,
-										color: colors.black,
-									},
-									headerTitleContainerStyle: {
-										marginHorizontal: 80,
-									},
-									headerRight: () => (
-										<LogOutBtn />
-										// <Button
-										// 	onPress={() => alert("This is a button!")}
-										// 	title="Press me"
-										// 	color="#fff"
-										// />
-									),
-								}}
-							/>
-						</MainStack.Navigator>
-						{/* <WelcomeScreen /> */}
-						{/* <PostsScreen /> */}
-					</NavigationContainer>
-				</View>
-			</SafeAreaView>
-		</TouchableWithoutFeedback>
+		<ToastProvider
+			placement="top"
+			duration={2500}
+			animationType="slide-in"
+			animationDuration={550}
+			warningColor={colors.accentDark}
+			icon={
+				<SimpleLineIcons
+					name="speech"
+					size={24}
+					color={colors.white}
+					style={{ paddingVertycal: 12, paddingHorizontal: 12 }}
+				/>
+			}
+			textStyle={{ fontSize: 20 }}
+			offset={200}
+			swipeEnabled={true}
+		>
+			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+				<SafeAreaView style={{ flex: 1 }}>
+					<View style={styles.container}>
+						<StatusBar style="auto" />
+						<NavigationContainer>
+							<MainStack.Navigator
+								initialRouteName="Login"
+								// initialRouteName="Home"
+							>
+								<MainStack.Screen
+									name="Login"
+									component={LoginScreen}
+									options={{ headerShown: false }}
+								/>
+								<MainStack.Screen
+									name="Register"
+									component={RegisterScreen}
+									options={{ headerShown: false }}
+								/>
+								<MainStack.Screen
+									name="Home"
+									component={Home}
+									options={{
+										headerShown: false,
+										title: "Створити публікацію",
+										headerStyle: {
+											borderBottomWidth: 1,
+											borderBottomColor: colors.gray,
+										},
+										headerTintColor: colors.gray,
+										headerTitleStyle: {
+											fontWeight: "medium",
+											fontSize: 18,
+											color: colors.black,
+										},
+										headerTitleContainerStyle: {
+											marginHorizontal: 80,
+										},
+										headerRight: () => <LogOutBtn />,
+									}}
+								/>
+							</MainStack.Navigator>
+							{/* <WelcomeScreen /> */}
+							{/* <PostsScreen /> */}
+						</NavigationContainer>
+					</View>
+				</SafeAreaView>
+			</TouchableWithoutFeedback>
+		</ToastProvider>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
-		// position: "relative",
 		flex: 1,
-		// backgroundColor: "#fff",
-		// alignItems: "center",
-		// justifyContent: "center",
 	},
 });

@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
 import colors from "../config/colors";
@@ -30,10 +29,6 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		gap: 8,
 
-		// marginLeft: 16,
-		// marginRight: 16,
-		// marginTop: 32,
-		// marginBottom: 32,
 		height: 60,
 	},
 	login: {

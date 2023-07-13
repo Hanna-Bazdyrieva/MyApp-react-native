@@ -1,36 +1,49 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
-	Text,
-	View,
-	StyleSheet,
+	Alert,
+	ImageBackground,
+	Keyboard,
 	KeyboardAvoidingView,
 	Platform,
+	Pressable,
+	StyleSheet,
+	Text,
+	TouchableWithoutFeedback,
+	View,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { Entypo } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
+import { useToast } from "react-native-toast-notifications";
+
 import colors from "../config/colors";
-import { ImageBackground } from "react-native";
-import { Pressable } from "react-native";
-import { Entypo, FontAwesome5, SimpleLineIcons } from "@expo/vector-icons";
-import { ViewBase } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
+
 import AppButton from "../components/AppButton";
-import { TouchableWithoutFeedback } from "react-native";
-import { Keyboard } from "react-native";
-import BottomTabIconsContainer from "../components/BottomTabIconsContainer";
+import AppTextInput from "../components/AppTextInput";
+import DeleteBtn from "../components/DeleteBtn";
+import Container from "../components/Container";
+
+const initialState = {
+	image: null,
+	title: "",
+	place: "",
+};
 
 export default function CreatePostsScreen() {
-	const [image, setImage] = useState(null);
-	const [title, setTitle] = useState(null);
-	const [location, setLocation] = useState(null);
+	const toast = useToast();
 
-	// console.log("image", image);
+	const navigation = useNavigation();
+
+	const [state, setState] = useState(initialState);
+	const [isFocused, setIsFocused] = useState(null);
+
+	// console.log("fcous", isFocused);
 
 	const deleteImage = () => {
-		// console.log("Delete Image");
-		setImage(null);
+		setState((prevState) => ({ ...prevState, image: null }));
 	};
+
 	const pickImage = async () => {
-		// console.log("Image Add");
 		let result = await ImagePicker.launchImageLibraryAsync({
 			mediaTypes: ImagePicker.MediaTypeOptions.All,
 			allowsEditing: true,
@@ -39,111 +52,111 @@ export default function CreatePostsScreen() {
 		});
 
 		if (!result.canceled) {
-			setImage(result.assets[0].uri);
+			setState((prevState) => ({ ...prevState, image: result.assets[0].uri }));
 		}
 	};
-	const submit = () => {
-		const { image, title, location } = state;
 
-		console.log(state);
+	const submit = (data) => {
+		const { image, title, place } = state;
+
+		if (!image || !title || !place) {
+			toast.show("Please fill all the fields", {
+				type: "warning",
+			});
+
+			return;
+		}
+
+		navigation.navigate("Home", {
+			screen: "Profile",
+			params: { state },
+		});
+
+		console.log("state", state);
+		setIsFocused(null);
+		setState(initialState);
 	};
 
 	const deletePost = () => {
-		console.log("delete");
+		setState(initialState);
 	};
 
 	return (
-		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"}
-				keyboardVerticalOffset={-190}
-				style={styles.container}
-			>
-				{/* <View style={styles.container}> */}
-				<Pressable style={styles.imgInputContainer} onPress={() => pickImage()}>
-					<View style={styles.imgContainer}>
-						<ImageBackground style={styles.image} source={{ uri: image }} />
-					</View>
-					<View
-						style={[
-							styles.cameraIconWrap,
-							{ backgroundColor: image ? colors.offWhite : colors.white },
-						]}
-					>
-						<Entypo
-							name="camera"
-							size={24}
-							style={styles.cameraIcon}
-							color={image ? colors.white : colors.gray}
-						/>
-					</View>
-					<Text style={styles.loadText}>
-						{image ? "Редагувати фото" : "Завантажте фото"}
-					</Text>
-					{image && (
-						<Entypo
-							style={styles.deleteIcon}
-							onPress={() => deleteImage()}
-							name="circle-with-cross"
-							size={24}
-							color={colors.gray}
+		<Container
+			keyboardOffset={-190}
+			style={{ justifyContent: "space-between" }}
+		>
+			<Pressable style={styles.imgInputContainer} onPress={() => pickImage()}>
+				<View style={styles.imgContainer}>
+					{state.image && (
+						<ImageBackground
+							style={styles.image}
+							source={{ uri: state.image }}
 						/>
 					)}
-				</Pressable>
-				<View>
-					<TextInput
-						style={[styles.input, styles.inputLocation]}
-						placeholder="Назва..."
-					/>
-					<Entypo
-						style={styles.locationIcon}
-						name="pencil"
-						size={24}
-						color={colors.gray}
-					/>
 				</View>
-
-				<View>
-					<TextInput
-						style={[styles.input, styles.inputLocation]}
-						placeholder="Місцевість..."
-					/>
-					<Entypo
-						style={styles.locationIcon}
-						name="location"
-						size={24}
-						color={colors.gray}
-					/>
-				</View>
-				<AppButton text="Опублікувати" pnPress={submit} iconPost />
-
-				<Pressable
-					onPress={deletePost}
-					style={({ pressed }) => [
-						{
-							backgroundColor: pressed ? colors.accent : colors.bgInput,
-							transform: pressed ? "scale(0.95)" : "scale(1)",
-						},
-						styles.deleteBtn,
+				<View
+					style={[
+						styles.cameraIconWrap,
+						{ backgroundColor: state.image ? colors.offWhite : colors.white },
 					]}
 				>
-					<FontAwesome5 name="trash-alt" size={24} color={colors.gray} />
-				</Pressable>
-				{/* </View> */}
-			</KeyboardAvoidingView>
-		</TouchableWithoutFeedback>
+					<Entypo
+						name="camera"
+						size={24}
+						style={styles.cameraIcon}
+						color={state.image ? colors.white : colors.gray}
+					/>
+				</View>
+
+				<Text style={styles.loadText}>
+					{state.image ? "Редагувати фото" : "Завантажте фото"}
+				</Text>
+				{state.image && (
+					<Entypo
+						style={styles.deleteIcon}
+						onPress={() => deleteImage()}
+						name="circle-with-cross"
+						size={24}
+						color={colors.gray}
+					/>
+				)}
+			</Pressable>
+
+			<AppTextInput
+				icon="pencil"
+				onChangeText={(text) =>
+					setState((prevState) => ({ ...prevState, title: text }))
+				}
+				onFocus={() => setIsFocused("title")}
+				placeholder="Назва..."
+				style={
+					isFocused === "title" ? { borderBottomColor: colors.accent } : null
+				}
+				value={state.title}
+			/>
+
+			<AppTextInput
+				icon="location"
+				onChangeText={(text) =>
+					setState((prevState) => ({ ...prevState, place: text }))
+				}
+				onFocus={() => setIsFocused("place")}
+				placeholder="Місцевість..."
+				style={
+					isFocused === "place" ? { borderBottomColor: colors.accent } : null
+				}
+				value={state.place}
+			/>
+
+			<AppButton text="Опублікувати" onPress={submit} iconPost />
+
+			<DeleteBtn onPress={deletePost} />
+		</Container>
 	);
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		justifyContent: "space-between",
-		paddingHorizontal: 16,
-		paddingVertical: 32,
-		// gap: 32,
-		backgroundColor: colors.white,
-	},
 	imgInputContainer: {
 		gap: 8,
 	},
@@ -165,7 +178,6 @@ const styles = StyleSheet.create({
 
 		width: 60,
 		height: 60,
-		// backgroundColor: colors.offWhite,
 		borderRadius: 30,
 	},
 	cameraIcon: {
@@ -184,21 +196,6 @@ const styles = StyleSheet.create({
 		color: colors.gray,
 		lineHeight: 19,
 	},
-	input: {
-		width: "100%",
-		height: 50,
-		// backgroundColor: colors.bgInput,
-		borderBottomColor: colors.borderInput,
-		borderBottomWidth: 1,
-	},
-	inputLocation: {
-		paddingLeft: 36,
-	},
-	locationIcon: {
-		position: "absolute",
-		bottom: 12,
-		left: 0,
-	},
 	title: {
 		fontSize: 16,
 		fontFamily: "Roboto-Medium",
@@ -213,7 +210,6 @@ const styles = StyleSheet.create({
 	},
 	infoWrap: {
 		flexDirection: "row",
-		// alignItems: "baseline",
 		gap: 6,
 	},
 	infoText: {
@@ -221,13 +217,5 @@ const styles = StyleSheet.create({
 		fontFamily: "Roboto-Regular",
 		color: colors.black,
 		lineHeight: 24,
-	},
-	deleteBtn: {
-		paddingHorizontal: 23,
-		paddingVertical: 8,
-		borderRadius: 20,
-		// backgroundColor: colors.bgInput,
-		width: 70,
-		alignSelf: "center",
 	},
 });

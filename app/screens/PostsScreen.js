@@ -1,10 +1,22 @@
-import { Text, View, StyleSheet } from "react-native";
-import UserInfo from "../components/UserInfo";
+import { StyleSheet } from "react-native";
 import { useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
+
+import UserInfo from "../components/UserInfo";
 import ImageCard from "../components/ImageCard";
+import Container from "../components/Container";
+
 import colors from "../config/colors";
 
 export default function PostsScreen() {
+	const navigation = useNavigation();
+
+	const handleCommentPress = () => {
+		navigation.navigate("Home", {
+			screen: "Comments",
+		});
+	};
+
 	const {
 		params: {
 			email = "hanna@mail.ua",
@@ -13,20 +25,12 @@ export default function PostsScreen() {
 		},
 	} = useRoute();
 	return (
-		<View style={styles.container}>
-			{/* <Text>MapScreen</Text> */}
+		<Container style={{ gap: 32 }}>
 			<UserInfo login={login} email={email} uri={uri} />
+			<ImageCard onPress={() => handleCommentPress()} />
 			<ImageCard />
-			<ImageCard />
-		</View>
+		</Container>
 	);
 }
 
-const styles = StyleSheet.create({
-	container: {
-		paddingHorizontal: 16,
-		paddingVertical: 32,
-		gap: 32,
-		backgroundColor: colors.white,
-	},
-});
+const styles = StyleSheet.create({});

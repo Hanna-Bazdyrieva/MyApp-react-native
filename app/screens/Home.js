@@ -6,7 +6,6 @@ import { AntDesign, Feather } from "@expo/vector-icons";
 
 import ProfileScreen from "./ProfileScreen";
 import CreatePostsScreen from "./CreatePostsScreen";
-import CommentsScreen from "./CommentsScreen";
 import PostsScreen from "./PostsScreen";
 
 import BottomTabIconsContainer from "../components/BottomTabIconsContainer";
@@ -14,15 +13,11 @@ import GoBackBtn from "../components/GoBackBtn";
 import LogOutBtn from "../components/LogOutBtn";
 
 import colors from "../config/colors";
+import CommentsScreen from "./CommentsScreen";
 
 const Tabs = createBottomTabNavigator();
 
 <AntDesign name="delete" size={24} color="black" />;
-
-// import { AntDesign } from "@expo/vector-icons";
-{
-	/* <AntDesign name="arrowup" size={24} color="black" />; */
-}
 
 // import { FontAwesome5 } from "@expo/vector-icons";
 {
@@ -36,9 +31,9 @@ export default function Home() {
 	return (
 		<Tabs.Navigator
 			initialRouteName="Profile"
+			// initialRouteName="Comments"
 			screenOptions={({ route }) => ({
 				tabBarStyle: {
-					// marginTop: 42,
 					height: 60,
 					borderTopColor: colors.gray,
 					borderTopWidth: 1,
@@ -76,11 +71,6 @@ export default function Home() {
 							</BottomTabIconsContainer>
 						);
 					}
-
-					// 		iconName = focused ? "ios-list-box" : "ios-list";
-					// 	}
-					// 	return <Ionicons name={iconName} size={size} color="black" />;
-					// },
 				},
 				tabBarShowLabel: false,
 			})}
@@ -95,14 +85,15 @@ export default function Home() {
 						borderBottomColor: colors.gray,
 					},
 					headerTintColor: colors.gray,
+					headerTitleAlign: "center",
 					headerTitleStyle: {
 						fontWeight: "medium",
 						fontSize: 18,
 						color: colors.black,
 					},
-					headerTitleContainerStyle: {
-						marginLeft: 140,
-					},
+					// headerTitleContainerStyle: {
+					// 	marginLeft: 140,
+					// },
 					headerRight: () => <LogOutBtn style={{ top: 15 }} />,
 				}}
 			/>
@@ -119,6 +110,38 @@ export default function Home() {
 						borderBottomColor: colors.gray,
 					},
 					headerTintColor: colors.gray,
+					headerTitleAlign: "center",
+					headerTitleStyle: {
+						fontWeight: "medium",
+						fontSize: 18,
+						color: colors.black,
+					},
+					// headerTitleContainerStyle: {
+					// 	marginHorizontal: 40,
+					// },
+					headerLeft: () => {
+						return (
+							// back &&
+							<GoBackBtn />
+						);
+					},
+				})}
+			/>
+
+			<Tabs.Screen
+				name="Comments"
+				component={CommentsScreen}
+				options={({ navigation, back }) => ({
+					tabBarItemStyle: { display: "none" },
+					tabBarStyle: { display: "none" },
+					title: "Коментарі",
+
+					headerStyle: {
+						borderBottomWidth: 1,
+						borderBottomColor: colors.gray,
+					},
+					headerTintColor: colors.gray,
+					headerTitleAlign: "center",
 					headerTitleStyle: {
 						fontWeight: "medium",
 						fontSize: 18,
@@ -135,7 +158,6 @@ export default function Home() {
 					},
 				})}
 			/>
-			{/* <Tabs.Screen name="Comments" component={CommentsScreen} /> */}
 
 			<Tabs.Screen
 				name="Profile"

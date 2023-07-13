@@ -1,25 +1,23 @@
 import React from "react";
-import { ImageBackground } from "react-native";
+import { ImageBackground, TouchableWithoutFeedback } from "react-native";
 import { StyleSheet, Text, View, Image } from "react-native";
 import colors from "../config/colors";
 import { FontAwesome5, SimpleLineIcons } from "@expo/vector-icons";
+import AppImageBackground from "./AppImageBackground";
 
-export default function ImageCard() {
+export default function ImageCard({ onPress }) {
 	return (
 		<View style={styles.container}>
-			<View style={styles.imgContainer}>
-				<ImageBackground
-					source={require("../assets/images/flowers.jpg")}
-					resizeMode="cover"
-					style={styles.image}
-				/>
-			</View>
+			<AppImageBackground source={require("../assets/images/flowers.jpg")} />
+
 			<Text style={styles.title}>ImageCard</Text>
 			<View style={styles.infoContainer}>
-				<View style={styles.infoWrap}>
-					<FontAwesome5 name="comment" size={24} color={colors.gray} />
-					<Text style={styles.infoText}>55</Text>
-				</View>
+				<TouchableWithoutFeedback onPress={onPress}>
+					<View style={styles.infoWrap} onPress={onPress}>
+						<FontAwesome5 name="comment" size={24} color={colors.gray} />
+						<Text style={styles.infoText}>55</Text>
+					</View>
+				</TouchableWithoutFeedback>
 				<View style={styles.infoWrap}>
 					<SimpleLineIcons name="location-pin" size={24} color={colors.gray} />
 					<Text style={[styles.infoText, { textDecorationLine: "underline" }]}>
@@ -37,16 +35,6 @@ const styles = StyleSheet.create({
 		gap: 8,
 		backgroundColor: colors.white,
 	},
-	imgContainer: {
-		width: "100%",
-		height: 240,
-		borderRadius: 8,
-		overflow: "hidden",
-	},
-
-	image: {
-		flex: 1,
-	},
 	title: {
 		fontSize: 16,
 		fontFamily: "Roboto-Medium",
@@ -61,7 +49,6 @@ const styles = StyleSheet.create({
 	},
 	infoWrap: {
 		flexDirection: "row",
-		// alignItems: "baseline",
 		gap: 6,
 	},
 	infoText: {
