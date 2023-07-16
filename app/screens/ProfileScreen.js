@@ -34,15 +34,8 @@ export default function ProfileScreen() {
 				<Title>Hanna Bazdyrieva</Title>
 
 				<ImageCard />
-				<ImageCard />
+				{/* <ImageCard /> */}
 			</View>
-			{/* <UserInfo
-				login={"Hanna Bazdyrieva"}
-				email={"hanna@mail.ua"}
-				uri={
-					"file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252FMyApp-4131bc3f-d962-4fcb-b707-650a1d72e688/ImagePicker/b0660409-0694-4fc6-86dc-6c39f42cd969.jpeg"
-				}
-			/> */}
 		</View>
 	);
 }
@@ -50,7 +43,7 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		// justifyContent: "flex-end",
+		justifyContent: "flex-end",
 	},
 	formContainer: {
 		gap: 32,

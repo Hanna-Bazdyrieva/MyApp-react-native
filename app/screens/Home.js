@@ -14,6 +14,7 @@ import LogOutBtn from "../components/LogOutBtn";
 
 import colors from "../config/colors";
 import CommentsScreen from "./CommentsScreen";
+import MapScreen from "./MapScreen";
 
 const Tabs = createBottomTabNavigator();
 
@@ -158,7 +159,36 @@ export default function Home() {
 					},
 				})}
 			/>
+			<Tabs.Screen
+				name="Map"
+				component={MapScreen}
+				options={({ navigation, back }) => ({
+					tabBarItemStyle: { display: "none" },
+					tabBarStyle: { display: "none" },
+					title: "Мапа",
 
+					headerStyle: {
+						borderBottomWidth: 1,
+						borderBottomColor: colors.gray,
+					},
+					headerTintColor: colors.gray,
+					headerTitleAlign: "center",
+					headerTitleStyle: {
+						fontWeight: "medium",
+						fontSize: 18,
+						color: colors.black,
+					},
+					headerTitleContainerStyle: {
+						marginHorizontal: 40,
+					},
+					headerLeft: () => {
+						return (
+							// back &&
+							<GoBackBtn />
+						);
+					},
+				})}
+			/>
 			<Tabs.Screen
 				name="Profile"
 				component={ProfileScreen}
