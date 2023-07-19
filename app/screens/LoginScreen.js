@@ -5,30 +5,38 @@ import {
 	TextInput,
 	StyleSheet,
 	KeyboardAvoidingView,
+	Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useForm, Controller } from "react-hook-form";
+import { useToast } from "react-native-toast-notifications";
 
-import { emailRules, loginRules, passwordRules } from "../utils/validateInputs";
+import { emailRules, passwordRules } from "../utils/validateInputs";
 import padding from "../utils/paddingsStyling";
 import colors from "../config/colors";
 
-import ButtonEl from "./AppButton";
-import Title from "./Title";
-import LinkText from "./LinkText";
-import ScreenImage from "./ScreenImage";
-import EyeToggle from "./EyeToggle";
-import Avatar from "./Avatar";
+import AppButton from "../components/AppButton";
+import Title from "../components/Title";
+import LinkText from "../components/LinkText";
+import ScreenImage from "../components/ScreenImage";
+import EyeToggle from "../components/EyeToggle";
+import { FIREBASE_AUTH } from "../../FirebaseConfig";
+import { ActivityIndicator } from "react-native";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { findUserDB, loginUserDB } from "../utils/firebaseDBHandlers";
+import { useDispatch } from "react-redux";
+import { addUser } from "../../redux/slice";
 
-export default function RegisterScreen() {
-	const [image, setImage] = useState(null);
+export default function LoginScreen({ navigation }) {
 	const [isSecure, setIsSecure] = useState(true);
 	const [isFocused, setIsFocused] = useState(null);
+	const [loading, setLoading] = useState(false);
 
-	const navigation = useNavigation();
+	const dispatch = useDispatch();
+	const toast = useToast();
+	const auth = FIREBASE_AUTH;
 
 	const defaultValues = {
-		login: "",
 		email: "",
 		password: "",
 	};
@@ -52,15 +60,34 @@ export default function RegisterScreen() {
 		setIsFocused(null);
 	};
 
-	const onSubmit = (data) => {
-		console.log("Registration data", data);
-		reset(defaultValues);
-		setIsFocused(null);
+	const login = async ({ email, password }) => {
+		console.log("Login data", email, password);
+		setLoading(true);
+		try {
+			const response = await signInWithEmailAndPassword(auth, email, password);
+			// find user in DB
+			console.log("response fire login", response.user);
+			const user = await findUserDB(email);
+			console.log("DBfire login", user);
 
-		navigation.navigate("Home", {
-			screen: "Profile",
-			params: { email: data.email, login: data.login, avatar: image },
-		});
+			dispatch(addUser(user));
+
+			navigation.navigate("Home", {
+				screen: "Posts",
+
+				params: { email },
+			});
+		} catch (error) {
+			console.log(error);
+			toast.show("LogIn failed" + error.message, {
+				type: "warning",
+			});
+		} finally {
+			reset(defaultValues);
+			setIsFocused(null);
+
+			setLoading(false);
+		}
 	};
 
 	return (
@@ -70,33 +97,8 @@ export default function RegisterScreen() {
 			style={styles.container}
 		>
 			<ScreenImage />
-
 			<View style={styles.formContainer}>
-				<Avatar setImage={setImage} image={image} />
-				<Title style={{ marginBottom: 32 }}>Реєстрація</Title>
-
-				<View style={styles.inputWrap}>
-					<Controller
-						control={control}
-						rules={loginRules}
-						render={({ field: { onChange, value } }) => (
-							<TextInput
-								style={[styles.input, isFocused === "login" && styles.focused]}
-								placeholder="Логін"
-								onBlur={onBlur}
-								onChangeText={onChange}
-								onFocus={() => onFocus("login")}
-								value={value}
-							></TextInput>
-						)}
-						name="login"
-					/>
-					{errors.login && (
-						<Text style={styles.error}>
-							Логін містить від 2 до 100 символів кирилиці / латиниці.
-						</Text>
-					)}
-				</View>
+				<Title style={{ marginBottom: 32 }}>Увійти</Title>
 
 				<View style={styles.inputWrap}>
 					<Controller
@@ -141,12 +143,12 @@ export default function RegisterScreen() {
 						)}
 						name="password"
 					/>
+
 					<EyeToggle
 						onPress={toggleSecure}
 						isSecure={isSecure}
 						isFocused={isFocused === "password"}
 					/>
-
 					{errors.password && (
 						<Text style={styles.error}>
 							Пароль від 6 до 16 символів містить цифру та спецсимвол.
@@ -154,9 +156,13 @@ export default function RegisterScreen() {
 					)}
 				</View>
 
-				<ButtonEl text="Зареєструватися" onPress={handleSubmit(onSubmit)} />
+				{loading ? (
+					<ActivityIndicator size="large" color={colors.accent} />
+				) : (
+					<AppButton text="Увійти" onPress={handleSubmit(login)} />
+				)}
 
-				<LinkText navigateTo={"login"} navigation={navigation} />
+				<LinkText navigateTo={"register"} navigation={navigation} />
 			</View>
 		</KeyboardAvoidingView>
 	);
@@ -168,27 +174,33 @@ const styles = StyleSheet.create({
 		justifyContent: "flex-end",
 	},
 	formContainer: {
-		...padding(92, 16, 78),
+		...padding(32, 16, 78),
 		width: "100%",
-		alignItems: "center",
 
+		alignItems: "center",
 		backgroundColor: colors.white,
 		borderTopLeftRadius: 25,
 		borderTopRightRadius: 25,
 	},
 	inputWrap: {
+		position: "relative",
 		width: "100%",
 	},
 	input: {
 		marginBottom: 16,
+
 		...padding(16),
 		width: "100%",
 		height: 60,
 		fontSize: 16,
+		fontFamily: "Roboto-Regular",
+
 		color: colors.black,
+
 		backgroundColor: colors.bgInput,
-		borderColor: colors.borderInput,
 		borderWidth: 1,
+
+		borderColor: colors.borderInput,
 		borderRadius: 8,
 	},
 	focused: {
@@ -201,6 +213,6 @@ const styles = StyleSheet.create({
 		bottom: 0,
 		left: 16,
 		fontSize: 12,
-		color: "red",
+		color: colors.error,
 	},
 });
