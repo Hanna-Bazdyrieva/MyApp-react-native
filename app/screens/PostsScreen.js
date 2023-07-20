@@ -12,6 +12,9 @@ import PostsSeparator from "../components/PostsSeparator";
 import ListImageCard from "../components/ListImageCard";
 import { View } from "react-native";
 import ListItemDeleteAction from "../components/ListItemDeleteAction";
+import { selectUser } from "../../redux/selectors";
+import { useDispatch, useSelector } from "react-redux";
+import { setPosts } from "../../redux/slice";
 
 const userInit = {
 	email: "hanna@mail.ua",
@@ -38,8 +41,12 @@ const postsInit = [
 ];
 
 export default function PostsScreen({ navigation, route }) {
-	const [posts, setPosts] = useState(postsInit);
-	const [user, setUser] = useState(userInit);
+	const dispatch = useDispatch();
+	const { user } = useSelector(selectUser);
+	console.log("user/PostsScreen", user);
+	let posts = user.posts;
+	// const [posts, setPosts] = useState(postsInit);
+	// const [user, setUser] = useState(userInit);
 	const [refreshing, setRefreshing] = useState(false);
 
 	useEffect(() => {
@@ -48,20 +55,21 @@ export default function PostsScreen({ navigation, route }) {
 		}
 	}, [route.params.state?.image]);
 
-	useEffect(() => {
-		if (route.params.email) {
-			setUser({
-				email: route.params.email,
-				login: route.params.login,
-				avatar: route.params.avatar,
-			});
-		}
-	}, [route.params.email]);
+	// useEffect(() => {
+	// 	if (route.params.email) {
+	// 		setUser({
+	// 			email: route.params.email,
+	// 			login: route.params.login,
+	// 			avatar: route.params.avatar,
+	// 		});
+	// 	}
+	// }, [route.params.email]);
 
 	const handleDelete = (post) => {
 		console.log("delete", post);
 		const newPosts = posts.filter((p) => p.title !== post.title);
-		setPosts(newPosts);
+		dispatch(setPosts(newPosts));
+		//! update posts in  fireDB
 	};
 
 	const handleCommentPress = () => {
@@ -91,21 +99,21 @@ export default function PostsScreen({ navigation, route }) {
 				data={posts}
 				keyExtractor={(_, id) => id.toString()}
 				ItemSeparatorComponent={() => <PostsSeparator />}
-				refreshing={refreshing}
-				onRefresh={() => {
-					setPosts([
-						{
-							image:
-								"file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252FMyApp-4131bc3f-d962-4fcb-b707-650a1d72e688/ImagePicker/b0660409-0694-4fc6-86dc-6c39f42cd969.jpeg",
-							title: "Nice photo",
-							place: "Carpathians, Ukraine",
-							coords: {
-								latitude: 49.64673964273703,
-								longitude: 23.349936255514663,
-							},
-						},
-					]);
-				}}
+				// refreshing={refreshing}
+				// onRefresh={() => {
+				// 	setPosts([
+				// 		{
+				// 			image:
+				// 				"file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252FMyApp-4131bc3f-d962-4fcb-b707-650a1d72e688/ImagePicker/b0660409-0694-4fc6-86dc-6c39f42cd969.jpeg",
+				// 			title: "Nice photo",
+				// 			place: "Carpathians, Ukraine",
+				// 			coords: {
+				// 				latitude: 49.64673964273703,
+				// 				longitude: 23.349936255514663,
+				// 			},
+				// 		},
+				// 	]);
+				// }}
 				renderItem={({ item }) => {
 					return (
 						<ListImageCard

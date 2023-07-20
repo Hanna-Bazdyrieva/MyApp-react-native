@@ -3,24 +3,32 @@ import * as ImagePicker from "expo-image-picker";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 import { ImageBackground } from "react-native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../../redux/slice";
 
 import colors from "../config/colors";
-import { FIREBASE_AUTH } from "../../FirebaseConfig";
+import avatar from "../assets/images/avatar.jpg";
+
 import { updateProfile } from "firebase/auth";
 import { useToast } from "react-native-toast-notifications";
+import { updateAvatarUserDB } from "../utils/firebaseServices/firebaseDBHandlers";
+import { updateUserAuth } from "../utils/firebaseServices/firebaseAuthHandlers";
+import { selectUser } from "../../redux/selectors";
 
 export default function Avatar({ setImage, image }) {
 	const dispatch = useDispatch();
 	const toast = useToast();
-
-	const auth = FIREBASE_AUTH;
+	const { user } = useSelector(selectUser);
+	console.log("user.avatar / Avatar", user.avatar);
 
 	const deleteImage = () => {
-		// console.log("Delete Avatar");
-		setImage(null);
-		dispatch(updateUser({ avatar: null }));
+		console.log("Delete Avatar");
+		// state redux
+		dispatch(updateUser({ avatar: "" }));
+		// firebase Auth
+		// updateUserAuth(null);
+		//firestoreDB
+		updateAvatarUserDB("", user.email);
 	};
 
 	const pickImage = async () => {
@@ -33,46 +41,35 @@ export default function Avatar({ setImage, image }) {
 		});
 
 		if (!result.canceled) {
-			setImage(result.assets[0].uri);
-			const user = auth.currentUser;
-			console.log("user / Avatr change", user);
-
-			// якщо такий користувач знайдений
-			if (user) {
-				// оновлюємо його профайл
-				try {
-					const response = await updateProfile(user, update);
-					console.log("response/Avatar", response / Avatar);
-				} catch (error) {
-					console.log(error.message);
-
-					toast.show("Sign Up failed: " + error.message, {
-						type: "warning",
-					});
-				}
-
-				dispatch(updateUser({ avatar: result.assets[0].uri }));
-			}
+			const avatar = result.assets[0].uri;
+			// state redux
+			dispatch(updateUser({ avatar }));
+			// firebase Auth
+			// updateUserAuth(avatar);
+			//firestoreDB
+			updateAvatarUserDB(avatar, user.email);
 		}
 	};
 
 	return (
 		<View style={styles.wrap}>
 			<View style={styles.avatar}>
-				<ImageBackground
-					source={{ uri: image }}
-					resizeMode="cover"
-					style={styles.image}
-				/>
+				{user.avatar !== "" && (
+					<ImageBackground
+						source={{ uri: user.avatar }}
+						resizeMode="cover"
+						style={styles.image}
+					/>
+				)}
 			</View>
 			<TouchableOpacity
 				style={styles.iconWrap}
-				onPress={image ? () => deleteImage() : () => pickImage()}
+				onPress={user.avatar ? () => deleteImage() : () => pickImage()}
 			>
 				<MaterialCommunityIcons
 					style={styles.icon}
-					name={image ? "close-circle-outline" : "plus-circle-outline"}
-					color={image ? colors.gray : colors.accent}
+					name={user.avatar ? "close-circle-outline" : "plus-circle-outline"}
+					color={user.avatar ? colors.gray : colors.accent}
 					size={25}
 				/>
 			</TouchableOpacity>

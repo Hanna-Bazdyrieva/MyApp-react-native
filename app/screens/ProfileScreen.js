@@ -1,8 +1,11 @@
 import { Text, View, StyleSheet, FlatList } from "react-native";
-import { useRoute } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
 
 import padding from "../utils/paddingsStyling";
 import colors from "../config/colors";
+
+import { getUser, setPosts } from "../../redux/slice";
+import { selectPosts, selectUser } from "../../redux/selectors";
 
 import ScreenImage from "../components/ScreenImage";
 import Title from "../components/Title";
@@ -10,20 +13,20 @@ import ImageCard from "../components/ListImageCard";
 import Avatar from "../components/Avatar";
 import LogOutBtn from "../components/LogOutBtn";
 import ListImageCard from "../components/ListImageCard";
-import { getUser } from "../../redux/slice";
-import { useDispatch, useSelector } from "react-redux";
-import { selectUser } from "../../redux/selectors";
 import ListItemDeleteAction from "../components/ListItemDeleteAction";
 import PostsSeparator from "../components/PostsSeparator";
 
 export default function ProfileScreen({ navigation }) {
+	const dispatch = useDispatch();
 	const { user } = useSelector(selectUser);
-	console.log("user/ profile", user);
+	console.log("user/redux/ profileScreen", user);
+	const posts = user.posts;
 
 	const handleDelete = (post) => {
 		console.log("delete", post);
-		// const newPosts = posts.filter((p) => p.title !== post.title);
-		// setPosts(newPosts);
+		const newPosts = posts.filter((p) => p.title !== post.title);
+		dispatch(setPosts(newPosts));
+		//! update posts in  fireDB
 	};
 
 	const handleCommentPress = () => {
@@ -43,7 +46,7 @@ export default function ProfileScreen({ navigation }) {
 			},
 		});
 	};
-	console.log("posts", user.posts);
+	console.log("user.posts / redux", user.posts);
 
 	return (
 		<View style={styles.container}>
@@ -55,7 +58,7 @@ export default function ProfileScreen({ navigation }) {
 				<Title>{user.login}</Title>
 
 				<FlatList
-					data={user.posts}
+					data={posts}
 					keyExtractor={(_, id) => id.toString()}
 					ItemSeparatorComponent={() => <PostsSeparator />}
 					// refreshing={refreshing}
@@ -91,9 +94,6 @@ export default function ProfileScreen({ navigation }) {
 						);
 					}}
 				/>
-
-				{/* <ListImageCard /> */}
-				{/* <ImageCard /> */}
 			</View>
 		</View>
 	);
@@ -107,12 +107,10 @@ const styles = StyleSheet.create({
 	formContainer: {
 		gap: 32,
 
-		marginTop: 150,
-		paddingHorizontal: 16,
+		marginTop: 180,
 
-		...padding(92, 16, 78),
+		...padding(92, 16, 0),
 		width: "100%",
-		// alignItems: "center",
 
 		backgroundColor: colors.white,
 		borderTopLeftRadius: 25,

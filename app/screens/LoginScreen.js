@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
 	Text,
 	View,
@@ -23,18 +23,26 @@ import EyeToggle from "../components/EyeToggle";
 import { FIREBASE_AUTH } from "../../FirebaseConfig";
 import { ActivityIndicator } from "react-native";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { findUserDB, loginUserDB } from "../utils/firebaseDBHandlers";
-import { useDispatch } from "react-redux";
-import { addUser } from "../../redux/slice";
+import {
+	findUserDB,
+	loginUserDB,
+} from "../utils/firebaseServices/firebaseDBHandlers";
+import { useDispatch, useSelector } from "react-redux";
+import { addUser, setIsLoading } from "../../redux/slice";
+import { selectIsLoading } from "../../redux/selectors";
 
 export default function LoginScreen({ navigation }) {
+	const auth = FIREBASE_AUTH;
+
+	const toast = useToast();
+	const dispatch = useDispatch();
+	const isLoading = useSelector(selectIsLoading);
+
+	useEffect(() => {
+		!isLoading && dispatch(setIsLoading(false));
+	}, [isLoading, dispatch]);
 	const [isSecure, setIsSecure] = useState(true);
 	const [isFocused, setIsFocused] = useState(null);
-	const [loading, setLoading] = useState(false);
-
-	const dispatch = useDispatch();
-	const toast = useToast();
-	const auth = FIREBASE_AUTH;
 
 	const defaultValues = {
 		email: "",
@@ -62,7 +70,7 @@ export default function LoginScreen({ navigation }) {
 
 	const login = async ({ email, password }) => {
 		console.log("Login data", email, password);
-		setLoading(true);
+		dispatch(setIsLoading(true));
 		try {
 			const response = await signInWithEmailAndPassword(auth, email, password);
 			// find user in DB
@@ -86,7 +94,7 @@ export default function LoginScreen({ navigation }) {
 			reset(defaultValues);
 			setIsFocused(null);
 
-			setLoading(false);
+			dispatch(setIsLoading(false));
 		}
 	};
 
@@ -156,7 +164,7 @@ export default function LoginScreen({ navigation }) {
 					)}
 				</View>
 
-				{loading ? (
+				{isLoading ? (
 					<ActivityIndicator size="large" color={colors.accent} />
 				) : (
 					<AppButton text="Увійти" onPress={handleSubmit(login)} />

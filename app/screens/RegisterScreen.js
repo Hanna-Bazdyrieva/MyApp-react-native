@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
+	ActivityIndicator,
 	Text,
 	View,
 	TextInput,
@@ -7,14 +8,17 @@ import {
 	KeyboardAvoidingView,
 } from "react-native";
 import { useForm, Controller } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useDispatch, useSelector } from "react-redux";
+import { useToast } from "react-native-toast-notifications";
 
 import { emailRules, loginRules, passwordRules } from "../utils/validateInputs";
 import padding from "../utils/paddingsStyling";
+import { addUserToDB } from "../utils/firebaseServices/firebaseDBHandlers";
+import { createUserFirebase } from "../utils/firebaseServices/firebaseAuthHandlers";
 import colors from "../config/colors";
-import { addUserToDB } from "../utils/firebaseDBHandlers";
-import { FIREBASE_AUTH } from "../../FirebaseConfig";
+
+import { addUser, setIsLoading } from "../../redux/slice";
+import { selectIsLoading } from "../../redux/selectors";
 
 import AppButton from "../components/AppButton";
 import Title from "../components/Title";
@@ -22,21 +26,19 @@ import LinkText from "../components/LinkText";
 import ScreenImage from "../components/ScreenImage";
 import EyeToggle from "../components/EyeToggle";
 import Avatar from "../components/Avatar";
-import { ActivityIndicator } from "react-native";
-import { useToast } from "react-native-toast-notifications";
-import { addUser } from "../../redux/slice";
-
-// import { registerUser } from 'redux/auth/authOperations';
 
 export default function RegisterScreen({ navigation }) {
+	const isLoading = useSelector(selectIsLoading);
+	useEffect(() => {
+		!isLoading && dispatch(setIsLoading(false));
+	}, [isLoading, dispatch]);
+
 	const dispatch = useDispatch();
 	const toast = useToast();
-	const auth = FIREBASE_AUTH;
 
 	const [image, setImage] = useState(null);
 	const [isSecure, setIsSecure] = useState(true);
 	const [isFocused, setIsFocused] = useState(null);
-	const [loading, setLoading] = useState(false);
 
 	const defaultValues = {
 		login: "",
@@ -65,22 +67,24 @@ export default function RegisterScreen({ navigation }) {
 
 	const signUp = async ({ email, login, password }) => {
 		console.log("Registration data", email, login, image);
-		setLoading(true);
+		const user = {
+			email,
+			login,
+			avatar: image,
+		};
+		dispatch(setIsLoading(true));
+		// setLoading(true);
 		try {
-			const response = await createUserWithEmailAndPassword(
-				auth,
-				email,
-				password
-			);
-			const user = {
+			const response = await createUserFirebase(
 				email,
 				login,
-				avatar: image,
-			};
-
-			const newUser = await addUserToDB(user);
-			console.log("newUser", newUser);
-			dispatch(addUser(newUser));
+				password,
+				navigation,
+				toast
+			);
+			// console.log("response", response);
+			await addUserToDB(user);
+			dispatch(addUser(user));
 
 			console.log("response Register", response);
 			navigation.navigate("Home", {
@@ -89,21 +93,11 @@ export default function RegisterScreen({ navigation }) {
 			});
 		} catch (error) {
 			console.log(error.message);
-			if (error.message === "Firebase: Error (auth/email-already-in-use).") {
-				navigation.navigate("Login");
-				toast.show("You already have an account, please, log in", {
-					type: "warning",
-				});
-			} else {
-				toast.show("Sign Up failed: " + error.message, {
-					type: "warning",
-				});
-			}
 		} finally {
 			reset(defaultValues);
 			setIsFocused(null);
 
-			setLoading(false);
+			dispatch(setIsLoading(false));
 		}
 	};
 
@@ -197,7 +191,7 @@ export default function RegisterScreen({ navigation }) {
 						</Text>
 					)}
 				</View>
-				{loading ? (
+				{isLoading ? (
 					<ActivityIndicator size="large" color={colors.accent} />
 				) : (
 					<AppButton text="Зареєструватися" onPress={handleSubmit(signUp)} />

@@ -27,6 +27,10 @@ import AppTextInput from "../components/AppTextInput";
 import DeleteBtn from "../components/DeleteBtn";
 import Container from "../components/Container";
 import PressableWrap from "../components/PressableWrap";
+import { useDispatch, useSelector } from "react-redux";
+import { selectPosts, selectUser } from "../../redux/selectors";
+import { addPost } from "../../redux/slice";
+import { updatePostsUserDB } from "../utils/firebaseServices/firebaseDBHandlers";
 
 const initialState = {
 	image: null,
@@ -35,10 +39,10 @@ const initialState = {
 	coords: {},
 };
 
-export default function CreatePostsScreen() {
+export default function CreatePostsScreen({ navigation }) {
+	const { user } = useSelector(selectUser);
 	const toast = useToast();
-
-	const navigation = useNavigation();
+	const dispatch = useDispatch();
 
 	const [state, setState] = useState(initialState);
 	const [isFocused, setIsFocused] = useState(null);
@@ -118,6 +122,10 @@ export default function CreatePostsScreen() {
 
 			return;
 		}
+		// state redux
+		dispatch(addPost(state));
+		//firestoreDB
+		updatePostsUserDB(user.posts.push(state), user.email);
 
 		navigation.navigate("Home", {
 			screen: "Posts",

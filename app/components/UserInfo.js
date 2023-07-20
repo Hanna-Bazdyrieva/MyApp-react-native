@@ -11,11 +11,13 @@ export default function UserInfo({
 		<>
 			<View style={styles.container}>
 				<View style={styles.avatar}>
-					<ImageBackground
-						source={{ uri: uri }}
-						resizeMode="cover"
-						style={styles.image}
-					/>
+					{uri && (
+						<ImageBackground
+							source={{ uri: uri }}
+							resizeMode="cover"
+							style={styles.image}
+						/>
+					)}
 				</View>
 				<View>
 					<Text style={styles.login}>{login}</Text>
