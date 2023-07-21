@@ -28,9 +28,12 @@ import DeleteBtn from "../components/DeleteBtn";
 import Container from "../components/Container";
 import PressableWrap from "../components/PressableWrap";
 import { useDispatch, useSelector } from "react-redux";
-import { selectPosts, selectUser } from "../../redux/selectors";
+import { selectUser } from "../../redux/selectors";
 import { addPost } from "../../redux/slice";
-import { updatePostsUserDB } from "../utils/firebaseServices/firebaseDBHandlers";
+import {
+	addPostUserDB,
+	updatePostsUserDB,
+} from "../utils/firebaseServices/firebaseDBHandlers";
 
 const initialState = {
 	image: null,
@@ -41,6 +44,7 @@ const initialState = {
 
 export default function CreatePostsScreen({ navigation }) {
 	const { user } = useSelector(selectUser);
+	const posts = user.posts;
 	const toast = useToast();
 	const dispatch = useDispatch();
 
@@ -50,6 +54,10 @@ export default function CreatePostsScreen({ navigation }) {
 	const [hasPermission, setHasPermission] = useState(null);
 	const [cameraRef, setCameraRef] = useState(null);
 	const [type, setType] = useState(Camera.Constants.Type.back);
+
+	useEffect(() => {
+		// console.log("posts/CreatePosts ", posts);
+	}, [posts]);
 
 	useEffect(() => {
 		(async () => {
@@ -83,7 +91,7 @@ export default function CreatePostsScreen({ navigation }) {
 			await MediaLibrary.createAssetAsync(uri);
 
 			setState((prevState) => ({ ...prevState, image: uri }));
-			console.log("image", state.image);
+			// console.log("image", state.image);
 		}
 	};
 
@@ -125,14 +133,13 @@ export default function CreatePostsScreen({ navigation }) {
 		// state redux
 		dispatch(addPost(state));
 		//firestoreDB
-		updatePostsUserDB(user.posts.push(state), user.email);
+		addPostUserDB(state, user.email);
 
 		navigation.navigate("Home", {
 			screen: "Posts",
 			params: { state },
 		});
 
-		// console.log("state", state);
 		setIsFocused(null);
 		setState(initialState);
 	};

@@ -1,10 +1,8 @@
 import "react-native-gesture-handler";
 import {
-	Button,
 	Keyboard,
 	SafeAreaView,
 	StyleSheet,
-	Text,
 	TouchableWithoutFeedback,
 	View,
 } from "react-native";
@@ -14,6 +12,9 @@ import { useFonts } from "expo-font";
 import { StatusBar } from "expo-status-bar";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { ToastProvider } from "react-native-toast-notifications";
+import { Provider } from "react-redux";
+import { store, persistor } from "./redux/store";
+import { PersistGate } from "redux-persist/integration/react";
 
 import Home from "./app/screens/Home";
 import LoginScreen from "./app/screens/LoginScreen";
@@ -21,13 +22,8 @@ import RegisterScreen from "./app/screens/RegisterScreen";
 import LogOutBtn from "./app/components/LogOutBtn";
 
 import colors from "./app/config/colors";
-import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
-import { store, persistor } from "./redux/store";
-import getStorage from "redux-persist/es/storage/getStorage";
 
 const MainStack = createStackNavigator();
-// console.log("state", store.getState());
 export default function App() {
 	const [fontsLoaded] = useFonts({
 		"Roboto-Bold": require("./app/assets/fonts/Roboto-Bold.ttf"),

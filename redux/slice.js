@@ -8,9 +8,12 @@ import avatar from "../app/assets/images/avatar.jpg";
 // };
 
 const userInitialState = {
-	user: { name: null, email: null, avatar: avatar },
-	// token: null,
-	// balance: null,
+	user: {
+		name: null,
+		email: null,
+		avatar: avatar,
+		posts: [],
+	},
 	isLoggedIn: false,
 	isLoading: false,
 	error: null,
@@ -21,33 +24,39 @@ const userSlice = createSlice({
 	initialState: userInitialState,
 	reducers: {
 		addUser(state, { payload }) {
-			console.log("payload/ slice/addUser", payload);
+			// console.log("payload/ slice/addUser", payload);
 			state.user = payload;
-			state.isLoggedIn = true;
+			// state.isLoggedIn = true;
+		},
+		loginUser(state, { payload }) {
+			// console.log("payload/ slice/loginUser", payload);
+			// state.isLoggedIn = true;
 		},
 		updateUser(state, { payload }) {
-			console.log("payload / slice / UpdateUser", payload);
+			// console.log("payload / slice / UpdateUser", payload);
 			state.user = { ...state.user, ...payload };
 		},
 		logoutUser(state, { payload }) {
-			state.user = userInitialState;
+			state.isLoggedIn = false;
 		},
 		setIsLoading(state, { payload }) {
 			state.isLoading = payload;
 		},
-		addPost(state, { payload }) {
-			console.log("payload / PostsSlice / create", payload);
-			console.log("state / PostsSlice / create", state);
+		setIsLoggedIn(state, { payload }) {
+			// console.log("payload / slice / setIsLoggedIn", payload);
 
+			state.isLoggedIn = payload;
+			// console.log(state);
+		},
+		addPost(state, { payload }) {
 			state.user.posts.push(payload);
-			console.log("state / PostsSlice / create", state.user.posts);
 		},
 		getPosts(state, { payload }) {
-			console.log(" PostsSlice / get", state.user.posts);
+			// console.log(" PostsSlice / get", state.user.posts);
 			return state.user.posts;
 		},
 		setPosts(state, { payload }) {
-			console.log(" PostsSlice / set", state.user.posts);
+			// console.log(" PostsSlice / set", state.user.posts);
 			state.user.posts = [...payload];
 		},
 		deletePost(state, { payload }) {},
@@ -59,14 +68,14 @@ const postsSlice = createSlice({
 	initialState: { posts: [] },
 	reducers: {
 		addPost(state, { payload }) {
-			console.log("payload / PostsSlice / create", payload);
-			console.log("state / PostsSlice / create", state);
+			// console.log("payload / PostsSlice / create", payload);
+			// console.log("state / PostsSlice / create", state);
 
 			state.posts.push(payload);
-			console.log("state / PostsSlice / create", state);
+			// console.log("state / PostsSlice / create", state);
 		},
 		getPosts(state, { payload }) {
-			console.log(" PostsSlice / get", state.user.posts);
+			// console.log(" PostsSlice / get", state.user.posts);
 			return state.posts;
 		},
 
@@ -83,10 +92,12 @@ export const {} = postsActions;
 const { actions: userActions, reducer: userReducer } = userSlice;
 export const {
 	addUser,
+	loginUser,
 	getUser,
 	updateUser,
 	logoutUser,
 	setIsLoading,
+	setIsLoggedIn,
 	addPost,
 	updatePost,
 	setPosts,

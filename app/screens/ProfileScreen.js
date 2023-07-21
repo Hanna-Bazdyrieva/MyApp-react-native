@@ -15,18 +15,21 @@ import LogOutBtn from "../components/LogOutBtn";
 import ListImageCard from "../components/ListImageCard";
 import ListItemDeleteAction from "../components/ListItemDeleteAction";
 import PostsSeparator from "../components/PostsSeparator";
+import { deletePostUserDB } from "../utils/firebaseServices/firebaseDBHandlers";
 
 export default function ProfileScreen({ navigation }) {
 	const dispatch = useDispatch();
 	const { user } = useSelector(selectUser);
-	console.log("user/redux/ profileScreen", user);
+	// console.log("user/redux/ profileScreen", user);
 	const posts = user.posts;
 
 	const handleDelete = (post) => {
-		console.log("delete", post);
 		const newPosts = posts.filter((p) => p.title !== post.title);
+		const deletedPost = posts.find((p) => p.image === post.image);
+		//update posts in state redux
 		dispatch(setPosts(newPosts));
-		//! update posts in  fireDB
+		// delete post in  fireDB
+		deletePostUserDB(deletedPost, user.email);
 	};
 
 	const handleCommentPress = () => {
@@ -36,7 +39,6 @@ export default function ProfileScreen({ navigation }) {
 	};
 
 	const handleLocationPress = ({ latitude, longitude }, place) => {
-		console.log("latitude posts", latitude);
 		navigation.navigate("Home", {
 			screen: "Map",
 			params: {
@@ -46,7 +48,7 @@ export default function ProfileScreen({ navigation }) {
 			},
 		});
 	};
-	console.log("user.posts / redux", user.posts);
+	// console.log("user.posts / redux", user.posts);
 
 	return (
 		<View style={styles.container}>

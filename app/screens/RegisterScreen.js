@@ -66,7 +66,7 @@ export default function RegisterScreen({ navigation }) {
 	};
 
 	const signUp = async ({ email, login, password }) => {
-		console.log("Registration data", email, login, image);
+		// console.log("Registration data", email, login, image);
 		const user = {
 			email,
 			login,
@@ -86,7 +86,7 @@ export default function RegisterScreen({ navigation }) {
 			await addUserToDB(user);
 			dispatch(addUser(user));
 
-			console.log("response Register", response);
+			// console.log("response Register", response);
 			navigation.navigate("Home", {
 				screen: "Profile",
 				params: user,

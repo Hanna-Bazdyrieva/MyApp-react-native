@@ -19,10 +19,10 @@ export default function Avatar({ setImage, image }) {
 	const dispatch = useDispatch();
 	const toast = useToast();
 	const { user } = useSelector(selectUser);
-	console.log("user.avatar / Avatar", user.avatar);
+	// console.log("user.avatar / Avatar", user.avatar);
 
 	const deleteImage = () => {
-		console.log("Delete Avatar");
+		// console.log("Delete Avatar");
 		// state redux
 		dispatch(updateUser({ avatar: "" }));
 		// firebase Auth

@@ -12,11 +12,19 @@ import colors from "../config/colors";
 import { Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
+import { logOutUserFirebase } from "../utils/firebaseServices/firebaseAuthHandlers";
+import { useDispatch } from "react-redux";
+import { setIsLoggedIn } from "../../redux/slice";
 
 export default function LogOutBtn({ style }) {
 	const navigation = useNavigation();
+	const dispatch = useDispatch();
 
 	const onPress = ({ style }) => {
+		// state redux isLoggedIn = False
+		dispatch(setIsLoggedIn(false));
+		//firebaseDB logout
+		logOutUserFirebase();
 		navigation.navigate("Login");
 	};
 

@@ -22,14 +22,24 @@ import ScreenImage from "../components/ScreenImage";
 import EyeToggle from "../components/EyeToggle";
 import { FIREBASE_AUTH } from "../../FirebaseConfig";
 import { ActivityIndicator } from "react-native";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import {
 	findUserDB,
 	loginUserDB,
 } from "../utils/firebaseServices/firebaseDBHandlers";
 import { useDispatch, useSelector } from "react-redux";
-import { addUser, setIsLoading } from "../../redux/slice";
-import { selectIsLoading } from "../../redux/selectors";
+import {
+	addUser,
+	loginUser,
+	setIsLoading,
+	setIsLoggedIn,
+} from "../../redux/slice";
+import {
+	selectIsLoading,
+	selectIsLoggedIn,
+	selectUser,
+} from "../../redux/selectors";
+import { loginUserFirebase } from "../utils/firebaseServices/firebaseAuthHandlers";
 
 export default function LoginScreen({ navigation }) {
 	const auth = FIREBASE_AUTH;
@@ -37,10 +47,33 @@ export default function LoginScreen({ navigation }) {
 	const toast = useToast();
 	const dispatch = useDispatch();
 	const isLoading = useSelector(selectIsLoading);
+	// console.log("isLoading", isLoading);
+	const isLoggedIn = useSelector(selectIsLoggedIn);
+	// console.log("isLogged", isLoggedIn);
+	const { user } = useSelector(selectUser);
 
 	useEffect(() => {
 		!isLoading && dispatch(setIsLoading(false));
 	}, [isLoading, dispatch]);
+
+	useEffect(() => {
+		if (!isLoggedIn) {
+			onAuthStateChanged(auth, (user) => {
+				if (user) {
+					// console.log("User logged in");
+					dispatch(setIsLoggedIn(true));
+					navigation.navigate("Home", {
+						screen: "Posts",
+					});
+				} else {
+					// console.log("User NOT logged in");
+
+					dispatch(setIsLoggedIn(false));
+				}
+			});
+		}
+	}, [isLoggedIn]);
+
 	const [isSecure, setIsSecure] = useState(true);
 	const [isFocused, setIsFocused] = useState(null);
 
@@ -69,27 +102,20 @@ export default function LoginScreen({ navigation }) {
 	};
 
 	const login = async ({ email, password }) => {
-		console.log("Login data", email, password);
+		// console.log("Login data", email, password);
 		dispatch(setIsLoading(true));
 		try {
-			const response = await signInWithEmailAndPassword(auth, email, password);
-			// find user in DB
-			console.log("response fire login", response.user);
+			loginUserFirebase(email, password, toast);
 			const user = await findUserDB(email);
-			console.log("DBfire login", user);
+			// console.log("DBfire login", user);
 
-			dispatch(addUser(user));
+			dispatch(loginUser(user));
 
 			navigation.navigate("Home", {
 				screen: "Posts",
-
-				params: { email },
 			});
 		} catch (error) {
 			console.log(error);
-			toast.show("LogIn failed" + error.message, {
-				type: "warning",
-			});
 		} finally {
 			reset(defaultValues);
 			setIsFocused(null);

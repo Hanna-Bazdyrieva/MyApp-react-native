@@ -8,6 +8,8 @@ import {
 	query,
 	where,
 	getDoc,
+	arrayUnion,
+	arrayRemove,
 } from "firebase/firestore";
 import { FIREBASE_DB } from "../../../FirebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -15,7 +17,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 const db = FIREBASE_DB;
 
 export const addUserToDB = async ({ email, login, avatar }) => {
-	console.log("adduser params", email, login, avatar);
+	// console.log("adduser params", email, login, avatar);
 	try {
 		const docRef = doc(collection(db, "users"), email);
 
@@ -31,44 +33,58 @@ export const addUserToDB = async ({ email, login, avatar }) => {
 export const findUserDB = async (email) => {
 	const docRef = doc(db, "users", email);
 	const docSnap = await getDoc(docRef);
-	const data = docSnap.data();
 
 	if (docSnap.exists()) {
-		console.log("Document data:", docSnap.data());
+		const data = docSnap.data();
+		// console.log("Document data:", docSnap.data());
+		return data;
 	} else {
 		console.log("No such document!");
 	}
-
-	// const usersRef = collection(db, "users");
-
-	// // Create a query against the collection.
-	// const q = query(usersRef, where("email", "==", email));
-	// const querySnapshot = await getDocs(q);
-	// // console.log("snapshot / findUserDB", querySnapshot);
-	// querySnapshot.forEach((doc) => {
-	// 	// doc.data() is never undefined for query doc snapshots
-	// });
-	console.log("findUserDB, userData", data);
-	return data;
 };
 
 export const updateAvatarUserDB = async (avatar, email) => {
-	console.log("update Avatar DB params", avatar, email);
+	// console.log("update Avatar DB params", avatar, email);
 	const userDocRef = doc(db, "users", email);
-	console.log("userDocRef", userDocRef.id);
+	// console.log("userDocRef", userDocRef.id);
 
 	await updateDoc(userDocRef, {
 		avatar,
 	});
 };
 export const updatePostsUserDB = async (posts, email) => {
-	console.log("update posts DB params", posts, email);
+	// console.log("update posts DB params", posts, email);
 	const userDocRef = doc(db, "users", email);
-	console.log("userDocRef", userDocRef.id);
+	// console.log("userDocRef", userDocRef.id);
 
 	await updateDoc(userDocRef, {
 		posts,
 	});
+};
+
+export const addPostUserDB = async (post, email) => {
+	// console.log("update posts DB params", post, email);
+	const userDocRef = doc(db, "users", email);
+	// console.log("userDocRef", userDocRef.id);
+	try {
+		await updateDoc(userDocRef, {
+			posts: arrayUnion(post),
+		});
+	} catch (e) {
+		console.error("Error adding Post: ", e);
+	}
+};
+export const deletePostUserDB = async (post, email) => {
+	// console.log("delete post DB params", post, email);
+	const userDocRef = doc(db, "users", email);
+	// console.log("userDocRef", userDocRef.id);
+	try {
+		await updateDoc(userDocRef, {
+			posts: arrayRemove(post),
+		});
+	} catch (e) {
+		console.error("Error deleting Post: ", e);
+	}
 };
 
 // updateAvatarUserDB("some.jpg", "anna.bazdyreva@gmail.com");
